@@ -1,6 +1,6 @@
 # Run a Wordpress server on Vagrant
 
-install a wordpress server with ubuntu 14.04, MySQL, nginx, php 5.6. 
+install a wordpress server with ubuntu 14.04, MySQL, nginx, php 7.0. 
 
 -. build a server
 ```
