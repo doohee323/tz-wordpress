@@ -2,11 +2,12 @@
 
 set -x
 
-export USER=ubuntu
+export USER=vagrant  # for vagrant
+#export USER=ubuntu  # for aws
 export PROJ_NAME=wordpress
 export PROJ_DIR=/home/$USER
-export SRC_DIR=$PROJ_DIR/resources
-#export SRC_DIR=/vagrant/resources
+export SRC_DIR=/vagrant/resources  # for vagrant
+#export SRC_DIR=$PROJ_DIR/resources # for aws
 
 echo '' >> $PROJ_DIR/.bashrc
 echo 'export PATH=$PATH:.' >> $PROJ_DIR/.bashrc
