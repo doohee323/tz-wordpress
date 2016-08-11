@@ -27,8 +27,8 @@ sudo nginx
 # curl http://127.0.0.1:80
 
 ### [install mysql] ############################################################################################################
-sudo sh -c "echo "mysql-server-5.6 mysql-server/root_password password passwd123" | sudo debconf-set-selections"
-sudo sh -c "echo "mysql-server-5.6 mysql-server/root_password_again password passwd123" | sudo debconf-set-selections"
+echo "mysql-server-5.6 mysql-server/root_password password passwd123" | sudo debconf-set-selections
+echo "mysql-server-5.6 mysql-server/root_password_again password passwd123" | sudo debconf-set-selections
 sudo apt-get install mysql-server-5.6 -y
 
 if [ -f "/etc/mysql/my.cnf" ]
@@ -52,7 +52,7 @@ FLUSH PRIVILEGES; \
 "
 
 sudo /etc/init.d/mysql restart  
-#mysql -h 45.33.35.145 -P 3306 -u root -p
+#mysql -h localhost -P 3306 -u root -p
 
 ### [install php] ############################################################################################################
 sudo apt-get install php7.0-fpm -y
