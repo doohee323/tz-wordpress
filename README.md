@@ -11,6 +11,7 @@ make an aws s3 bucket as wordpress media repository.
 
 -. build a server
 ```
+	- password: passwd123
 	<for Vagrant>
 		vagrant destroy -f && vagrant up
 		vagrant ssh
@@ -42,7 +43,6 @@ make an aws s3 bucket as wordpress media repository.
 	
 -. access to mysql
 ```
-	- password: passwd123
 	<for Vagrant>
 		mysql -h 192.168.82.170 -P 3306 -u root -p
 	<for AWS>
