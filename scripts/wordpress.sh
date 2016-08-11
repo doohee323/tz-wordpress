@@ -2,9 +2,11 @@
 
 set -x
 
+export USER=ubuntu
 export PROJ_NAME=wordpress
-export PROJ_DIR=/home/vagrant
-export SRC_DIR=/vagrant/resources
+export PROJ_DIR=/home/$USER
+export SRC_DIR=$PROJ_DIR/resources
+#export SRC_DIR=/vagrant/resources
 
 echo '' >> $PROJ_DIR/.bashrc
 echo 'export PATH=$PATH:.' >> $PROJ_DIR/.bashrc
@@ -75,7 +77,7 @@ sudo service iptables save
 sudo service iptables restart
 
 ### [install wordpress] ############################################################################################################
-su - vagrant
+su - $USER
 
 cd $PROJ_DIR
 wget http://wordpress.org/latest.tar.gz
@@ -117,7 +119,7 @@ cd s3fs-fuse
 make
 sudo make install
 
-echo AKIAJOEN111111VX5SWQ:P/N6fMLdjxLjB11111111111111u1YsUJ7OxjkEB > /etc/passwd-s3fs
+echo 11111111111111111111:1111111111111111111111111111111111111111 > /etc/passwd-s3fs
 sudo chmod 600 /etc/passwd-s3fs
 
 mkdir -p /usr/share/nginx/html/wp-content/uploads
