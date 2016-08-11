@@ -109,25 +109,29 @@ sudo sh -c "echo www-data >> /etc/ftpusers"
 service vsftpd restart
 
 ### [install s3] ############################################################################################################
-cd
-sudo apt-get install automake autotools-dev g++ git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev make pkg-config -y
-git clone https://github.com/s3fs-fuse/s3fs-fuse.git
-cd s3fs-fuse
-./autogen.sh
-./configure
-make
-sudo make install
-
-sudo sh -c "echo $AWS_KEY > /etc/passwd-s3fs"
-sudo chmod 600 /etc/passwd-s3fs
-
 sudo mkdir -p /usr/share/nginx/html/wp-content/uploads
-sudo s3fs topzone /usr/share/nginx/html/wp-content/uploads -o nonempty -o allow_other 
-# sudo s3fs topzone /usr/share/nginx/html/wp-content/uploads -o passwd_file=/etc/passwd-s3fs -d -d -f -o f2 -o curldbg -o nonempty 
-# sudo umount /usr/share/nginx/html/wp-content/uploads
-# sudo fusermount -u /usr/share/nginx/html/wp-content/uploads
-# chown -Rf www-data:www-data /usr/share/nginx/html/wp-content/uploads
-# cf. s3fs topzone /usr/share/nginx/html/wp-content/uploads -o passwd_file=/etc/passwd-s3fs -d -d -f -o f2 -o curldbg
-sudo echo "topzone /usr/share/nginx/html/wp-content/uploads fuse.s3fs _netdev,allow_other,dbglevel=dbg,curldbg 0 0" >> /etc/fstab
+if [ $1 == "aws" ]
+then
+	cd
+	sudo apt-get install automake autotools-dev g++ git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev make pkg-config -y
+	git clone https://github.com/s3fs-fuse/s3fs-fuse.git
+	cd s3fs-fuse
+	./autogen.sh
+	./configure
+	make
+	sudo make install
+	
+	sudo sh -c "echo $AWS_KEY > /etc/passwd-s3fs"
+	sudo chmod 600 /etc/passwd-s3fs
+	
+	sudo s3fs topzone /usr/share/nginx/html/wp-content/uploads -o nonempty -o allow_other 
+	# sudo s3fs topzone /usr/share/nginx/html/wp-content/uploads -o passwd_file=/etc/passwd-s3fs -d -d -f -o f2 -o curldbg -o nonempty 
+	# sudo umount /usr/share/nginx/html/wp-content/uploads
+	# sudo fusermount -u /usr/share/nginx/html/wp-content/uploads
+	# cf. s3fs topzone /usr/share/nginx/html/wp-content/uploads -o passwd_file=/etc/passwd-s3fs -d -d -f -o f2 -o curldbg
+	sudo echo "topzone /usr/share/nginx/html/wp-content/uploads fuse.s3fs _netdev,allow_other,dbglevel=dbg,curldbg 0 0" >> /etc/fstab
+else 
+	chown -Rf www-data:www-data /usr/share/nginx/html/wp-content/uploads
+if
 
 exit 0

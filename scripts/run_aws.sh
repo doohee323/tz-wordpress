@@ -11,6 +11,6 @@ sed -i "s|USER=vagrant|USER=ubuntu|g" /home/ubuntu/scripts/wordpress.sh
 sed -i "s|SRC_DIR=/vagrant|SRC_DIR=/home/ubuntu|g" /home/ubuntu/scripts/wordpress.sh
 
 cd /home/ubuntu/scripts
-bash wordpress.sh
+bash wordpress.sh aws
 
 exit 0
