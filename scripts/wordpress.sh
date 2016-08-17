@@ -61,7 +61,9 @@ sudo sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g" /etc/php/7.0/fpm/php.in
 sudo sed -i "s/;error_log = php_errors.log/error_log = php_errors.log/g" /etc/php/7.0/fpm/php.ini
 sudo sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 200M/g" /etc/php/7.0/fpm/php.ini
 sudo sed -i "s/post_max_size = 8M/post_max_size = 200M/g" /etc/php/7.0/fpm/php.ini
-sudo sed -i "s/max_execution_time = 300/max_execution_time = 1000/g" /etc/php/7.0/fpm/php.ini
+sudo sed -i "s/max_execution_time = 300/max_execution_time = 24000/g" /etc/php/7.0/fpm/php.ini
+sudo sed -i "s/max_input_time = 300/max_input_time = 24000/g" /etc/php/7.0/fpm/php.ini
+sudo sed -i "s/memory_limit = 128MB/memory_limit = 2048M/g" /etc/php/7.0/fpm/php.ini
 
 sudo service php7.0-fpm restart
 
