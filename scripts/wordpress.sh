@@ -108,7 +108,7 @@ sed -i "s/#write_enable=YES/write_enable=YES/g" /etc/vsftpd.conf
 sed -i "s/pam_service_name=vsftpd/pam_service_name=ftp/g" /etc/vsftpd.conf
 sudo sh -c "echo www-data >> /etc/ftpusers"
 
-#useradd -g www-data -d /home/www-data -s /bin/bsh -m Hongdoohee!323
+#useradd -g www-data -d /home/www-data -s /bin/bsh -m xxxxxx
 service vsftpd restart
 
 ### [install s3] ############################################################################################################
