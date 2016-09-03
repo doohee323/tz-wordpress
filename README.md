@@ -51,14 +51,14 @@ make an aws s3 bucket as wordpress media repository.
 
 -. working directory
 ```
-	/usr/share/nginx/html 
+	/vagrant/wordpress 
 ```
 
 -. upload directory
 ```
-	/usr/share/nginx/html/wp-content/uploads
+	/vagrant/wordpress/wp-content/uploads
 	$> df -k
-	s3fs           274877906944       0 274877906944   0% /usr/share/nginx/html/wp-content/uploads
+	s3fs           274877906944       0 274877906944   0% /vagrant/wordpress/wp-content/uploads
 ```
 
 

@@ -92,10 +92,11 @@ sed -i "s/database_name_here/wordpress/g" $PROJ_DIR/wordpress/wp-config.php
 sed -i "s/username_here/wordpressuser/g" $PROJ_DIR/wordpress/wp-config.php
 sed -i "s/password_here/passwd123/g" $PROJ_DIR/wordpress/wp-config.php
 
-sudo rsync -avP $PROJ_DIR/wordpress/ /usr/share/nginx/html/
+sudo mkdir -p /vagrant
+sudo rsync -avP $PROJ_DIR/wordpress/ /vagrant/wordpress/
 
 sudo usermod -a -G www-data www-data
-sudo chown -R www-data:www-data /usr/share/nginx/html/
+sudo chown -R www-data:www-data /vagrant/wordpress/
 
 #curl http://192.168.82.170
 
@@ -111,7 +112,7 @@ sudo sh -c "echo www-data >> /etc/ftpusers"
 service vsftpd restart
 
 ### [install s3] ############################################################################################################
-sudo mkdir -p /usr/share/nginx/html/wp-content/uploads
+sudo mkdir -p /vagrant/wordpress/wp-content/uploads
 if [ $1 == "aws" ]
 then
 	cd
@@ -126,14 +127,14 @@ then
 	sudo sh -c "echo $AWS_KEY > /etc/passwd-s3fs"
 	sudo chmod 600 /etc/passwd-s3fs
 	
-	sudo s3fs topzone /usr/share/nginx/html/wp-content/uploads -o nonempty -o allow_other 
-	# sudo s3fs topzone /usr/share/nginx/html/wp-content/uploads -o passwd_file=/etc/passwd-s3fs -d -d -f -o f2 -o curldbg -o nonempty 
-	# sudo umount /usr/share/nginx/html/wp-content/uploads
-	# sudo fusermount -u /usr/share/nginx/html/wp-content/uploads
-	# cf. s3fs topzone /usr/share/nginx/html/wp-content/uploads -o passwd_file=/etc/passwd-s3fs -d -d -f -o f2 -o curldbg
-	sudo echo "topzone /usr/share/nginx/html/wp-content/uploads fuse.s3fs _netdev,allow_other,dbglevel=dbg,curldbg 0 0" >> /etc/fstab
+	sudo s3fs topzone /vagrant/wordpress/wp-content/uploads -o nonempty -o allow_other 
+	# sudo s3fs topzone /vagrant/wordpress/wp-content/uploads -o passwd_file=/etc/passwd-s3fs -d -d -f -o f2 -o curldbg -o nonempty 
+	# sudo umount /vagrant/wordpress/wp-content/uploads
+	# sudo fusermount -u /vagrant/wordpress/wp-content/uploads
+	# cf. s3fs topzone /vagrant/wordpress/wp-content/uploads -o passwd_file=/etc/passwd-s3fs -d -d -f -o f2 -o curldbg
+	sudo echo "topzone /vagrant/wordpress/wp-content/uploads fuse.s3fs _netdev,allow_other,dbglevel=dbg,curldbg 0 0" >> /etc/fstab
 else 
-	chown -Rf www-data:www-data /usr/share/nginx/html/wp-content/uploads
+	chown -Rf www-data:www-data /vagrant/wordpress/wp-content/uploads
 if
 
 exit 0
