@@ -33,14 +33,30 @@ make an aws s3 bucket as wordpress media repository.
 			ssh -i $PEM.pem ubuntu@$AWS_EC2_IP_ADDRESS
 ```
 
+-. install plugins
+```
+	cd /vagrant/wordpress
+	wp core install --url="192.168.82.170"  --title="topzone" --admin_user="admin" --admin_password="admin123" --admin_email="admin@gmail.com"
+	wp core update
+	wp plugin update --all
+	wp theme update --all
+	
+	wp plugin install bbpress --activate
+	wp plugin install jetpack --activate
+	wp plugin install kboard-downloader --activate
+	wp plugin install wptouch --activate
+```
+
 -. configure a wordpress server
 ```
 	<for Vagrant>
 		- http://192.168.82.170 
 	<for AWS>
-		- http://$AWS_EC2_IP_ADDRESS 
+		- http://$AWS_EC2_IP_ADDRESS
+		
+	- id / password = admin/admin123
 ```
-	
+
 -. access to mysql
 ```
 	<for Vagrant>
