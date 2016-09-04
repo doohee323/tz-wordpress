@@ -41,10 +41,16 @@ make an aws s3 bucket as wordpress media repository.
 	wp plugin update --all
 	wp theme update --all
 	
+	# wp plugin search EDITFLOW
+
 	wp plugin install bbpress --activate
 	wp plugin install jetpack --activate
 	wp plugin install kboard-downloader --activate
 	wp plugin install wptouch --activate
+	wp plugin install buddypress --activate
+	wp plugin install sidebar-login --activate
+	wp plugin install edit-flow --activate
+	
 ```
 
 -. configure a wordpress server
@@ -68,6 +74,7 @@ make an aws s3 bucket as wordpress media repository.
 -. working directory
 ```
 	/vagrant/wordpress 
+	1 minuite after changing any resources under /vagrant/wordpress, /usr/share/nginx/html will be synced.
 ```
 
 -. upload directory
