@@ -14,7 +14,9 @@ sudo sh -c "echo 'export HOME_DIR='$HOME_DIR >> $HOME_DIR/.bashrc"
 sudo sh -c "echo 'export SRC_DIR='$SRC_DIR >> $HOME_DIR/.bashrc"
 source $HOME_DIR/.bashrc
 
+sudo apt-get install software-properties-common -y
 sudo add-apt-repository ppa:ondrej/php -y
+
 sudo apt-get update
 
 ### [install nginx] ############################################################################################################
@@ -92,6 +94,7 @@ sudo mkdir -p /vagrant
 sudo rsync -avP $PROJ_DIR/wordpress/ /usr/share/nginx/html/
 cat <(crontab -l) <(echo "* * * * * sudo rsync -avP $PROJ_DIR/wordpress/ /usr/share/nginx/html/ && sudo chown -Rf www-data:www-data /usr/share/nginx/html") | crontab -
 
+sudo mkdir -p $PROJ_DIR/wordpress
 #sudo userdel www-data
 #sudo useradd -c "www-data" -m -d $PROJ_DIR/wordpress/ -s /bin/bash -G sudo www-data
 sudo usermod -a -G www-data www-data
