@@ -93,7 +93,7 @@ sudo rsync -avP $PROJ_DIR/wordpress/ /usr/share/nginx/html/
 cat <(crontab -l) <(echo "* * * * * sudo rsync -avP $PROJ_DIR/wordpress/ /usr/share/nginx/html/ && sudo chown -Rf www-data:www-data /usr/share/nginx/html") | crontab -
 
 #sudo userdel www-data
-#sudo useradd -c "www-data" -m -d $PROJ_DIR/wordpress/ -s /bin/bash -G sudo www-data
+#sudo useradd -c "www-data" -m -d $PROJ_DIR/wordpress/ -s /bin/bash -G www-data
 sudo usermod -a -G www-data www-data
 sudo usermod --home $PROJ_DIR/wordpress/ www-data
 echo -e "www-data\nwww-data" | sudo passwd www-data
