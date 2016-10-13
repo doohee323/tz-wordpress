@@ -24,6 +24,7 @@ sudo apt-get install nginx -y
 
 sudo cp $SRC_DIR/nginx/nginx.conf /etc/nginx/nginx.conf
 sudo cp -Rf $SRC_DIR/nginx/default /etc/nginx/sites-enabled
+#sudo cp -Rf $SRC_DIR/nginx/wordpress /etc/nginx/sites-enabled
 # curl http://127.0.0.1:80
 sudo service nginx stop
 sudo nginx -s stop
