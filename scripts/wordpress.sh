@@ -24,7 +24,6 @@ sudo apt-get install nginx -y
 
 sudo cp $SRC_DIR/nginx/nginx.conf /etc/nginx/nginx.conf
 sudo cp -Rf $SRC_DIR/nginx/default /etc/nginx/sites-enabled
-#sudo cp -Rf $SRC_DIR/nginx/wordpress /etc/nginx/sites-enabled
 # curl http://127.0.0.1:80
 sudo service nginx stop
 sudo nginx -s stop
@@ -36,9 +35,9 @@ sudo apt-get install mysql-server-5.6 -y
 
 if [ -f "/etc/mysql/my.cnf" ]
 then
-	sudo sed -i "s/bind-address/#bind-address/g" /etc/mysql/my.cnf
+    sudo sed -i "s/bind-address/#bind-address/g" /etc/mysql/my.cnf
 else
-	sudo sed -i "s/bind-address/#bind-address/g" /etc/mysql/mysql.conf.d/mysqld.cnf
+    sudo sed -i "s/bind-address/#bind-address/g" /etc/mysql/mysql.conf.d/mysqld.cnf
 fi
 
 sudo mysql -u root -ppasswd123 -e \
@@ -67,7 +66,7 @@ sudo sed -i "s/memory_limit = 128MB/memory_limit = 2048M/g" /etc/php/7.0/fpm/php
 sudo service php7.0-fpm stop 
 
 ### [open firewalls] ############################################################################################################
-ufw allow "Nginx Full"
+sudo ufw allow "Nginx Full"
 sudo iptables -I INPUT -p tcp --dport 21 -j ACCEPT
 sudo iptables -I INPUT -p tcp --dport 22 -j ACCEPT
 sudo iptables -I INPUT -p tcp --dport 80 -j ACCEPT
@@ -97,7 +96,7 @@ cat <(crontab -l) <(echo "* * * * * sudo rsync -avP $PROJ_DIR/wordpress/ /usr/sh
 
 sudo mkdir -p $PROJ_DIR/wordpress
 #sudo userdel www-data
-#sudo useradd -c "www-data" -m -d $PROJ_DIR/wordpress/ -s /bin/bash -G www-data
+#sudo useradd -c "www-data" -m -d $PROJ_DIR/wordpress/ -s /bin/bash -G sudo www-data
 sudo usermod -a -G www-data www-data
 sudo usermod --home $PROJ_DIR/wordpress/ www-data
 echo -e "www-data\nwww-data" | sudo passwd www-data
@@ -116,26 +115,26 @@ sudo sh -c "echo www-data >> /etc/ftpusers"
 sudo mkdir -p /usr/share/nginx/html/wp-content/uploads
 if [ $1 == "aws" ]
 then
-	cd
-	sudo apt-get install automake autotools-dev g++ git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev make pkg-config -y
-	git clone https://github.com/s3fs-fuse/s3fs-fuse.git
-	cd s3fs-fuse
-	./autogen.sh
-	./configure
-	make
-	sudo make install
-	
-	sudo sh -c "echo $AWS_KEY > /etc/passwd-s3fs"
-	sudo chmod 600 /etc/passwd-s3fs
-	
-	sudo s3fs topzone /usr/share/nginx/html/wp-content/uploads -o nonempty -o allow_other 
-	# sudo s3fs topzone /usr/share/nginx/html/wp-content/uploads -o passwd_file=/etc/passwd-s3fs -d -d -f -o f2 -o curldbg -o nonempty 
-	# sudo umount /usr/share/nginx/html/wp-content/uploads
-	# sudo fusermount -u /usr/share/nginx/html/wp-content/uploads
-	# cf. s3fs topzone /usr/share/nginx/html/wp-content/uploads -o passwd_file=/etc/passwd-s3fs -d -d -f -o f2 -o curldbg
-	sudo echo "topzone /usr/share/nginx/html/wp-content/uploads fuse.s3fs _netdev,allow_other,dbglevel=dbg,curldbg 0 0" >> /etc/fstab
+    cd
+    sudo apt-get install automake autotools-dev g++ git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev make pkg-config -y
+    git clone https://github.com/s3fs-fuse/s3fs-fuse.git
+    cd s3fs-fuse
+    ./autogen.sh
+    ./configure
+    make
+    sudo make install
+    
+    sudo sh -c "echo $AWS_KEY > /etc/passwd-s3fs"
+    sudo chmod 600 /etc/passwd-s3fs
+    
+    sudo s3fs topzone /usr/share/nginx/html/wp-content/uploads -o nonempty -o allow_other 
+    # sudo s3fs topzone /usr/share/nginx/html/wp-content/uploads -o passwd_file=/etc/passwd-s3fs -d -d -f -o f2 -o curldbg -o nonempty 
+    # sudo umount /usr/share/nginx/html/wp-content/uploads
+    # sudo fusermount -u /usr/share/nginx/html/wp-content/uploads
+    # cf. s3fs topzone /usr/share/nginx/html/wp-content/uploads -o passwd_file=/etc/passwd-s3fs -d -d -f -o f2 -o curldbg
+    sudo echo "topzone /usr/share/nginx/html/wp-content/uploads fuse.s3fs _netdev,allow_other,dbglevel=dbg,curldbg 0 0" >> /etc/fstab
 else 
-	chown -Rf www-data:www-data /usr/share/nginx/html/wp-content/uploads
+    chown -Rf www-data:www-data /usr/share/nginx/html/wp-content/uploads
 fi
 
 ### [start services] ############################################################################################################

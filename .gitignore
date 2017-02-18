@@ -2,3 +2,4 @@
 /wordpress/
 /latest.tar.gz
 .bashrc
+.DS_Store
