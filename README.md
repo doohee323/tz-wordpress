@@ -16,7 +16,7 @@ make an aws s3 bucket as wordpress media repository.
 		vagrant destroy -f && vagrant up
 		vagrant ssh
 		cf. all scripts
-			/wordpress-vagrant/scripts/wordpress.sh
+			/tz-wordpress/scripts/wordpress.sh
 		
 	<for AWS>
 		# make ec2 instanace with Ubuntu Server 14.04 LTS
@@ -25,8 +25,8 @@ make an aws s3 bucket as wordpress media repository.
 		export AWS_EC2_IP_ADDRESS=54.153.115.68
 		bash aws.sh
 		cf. all scripts
-			/wordpress-vagrant/scripts/run_aws.sh
-			/wordpress-vagrant/scripts/wordpress.sh
+			/tz-wordpress/scripts/run_aws.sh
+			/tz-wordpress/scripts/wordpress.sh
 		cf. access to terminal after opening firewal for the ec2 instance
 			cd ~/.ssh
 			chmod 600 $PEM.pem
