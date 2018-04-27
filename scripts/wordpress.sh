@@ -16,7 +16,7 @@ source $HOME_DIR/.bashrc
 
 sudo apt-get install software-properties-common -y
 sudo add-apt-repository ppa:ondrej/php -y
-
+sudo add-apt-repository ppa:ondrej/mysql-5.6 -y
 sudo apt-get update
 
 ### [install nginx] ############################################################################################################

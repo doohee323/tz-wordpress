@@ -1,6 +1,6 @@
 # Run a Wordpress server on Vagrant or AWS
 
-install a wordpress server with ubuntu 14.04, MySQL, nginx, php 7.0. 
+install a wordpress server with ubuntu 16.04, MySQL, nginx, php 7.0. 
 make an aws s3 bucket as wordpress media repository.
 
 -. register AWS Access key
@@ -19,7 +19,7 @@ make an aws s3 bucket as wordpress media repository.
 			/tz-wordpress/scripts/wordpress.sh
 		
 	<for AWS>
-		# make ec2 instanace with Ubuntu Server 14.04 LTS
+		# make ec2 instanace with Ubuntu Server 16.04 LTS
 		# set your pem file and aws ec2 ip address 
 		export PEM=topzone_ca1
 		export AWS_EC2_IP_ADDRESS=54.153.115.68
@@ -83,5 +83,9 @@ make an aws s3 bucket as wordpress media repository.
 	$> df -k
 	s3fs           274877906944       0 274877906944   0% /vagrant/wordpress/wp-content/uploads
 ```
+
+-. Test
+	https://192.168.82.170
+
 
 
