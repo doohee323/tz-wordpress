@@ -16,38 +16,35 @@ make an aws s3 bucket as wordpress media repository.
 ```
     git clone https://github.com/doohee323/tz-wordpress
     cd tz-wordpress
-    vagrant up
+	vagrant destroy -f && vagrant up
+	vagrant ssh
+	cf. all scripts
+		/tz-wordpress/scripts/wordpress.sh
 ```
 
 ## Run on AWS
--. register AWS Access key
+-. prep.
 ```
+	- register AWS Access key
 	export AWS_KEY=11111111111111111111:1111111111111111111111111111111111111111
 	cf. on aws console, Your Security Credentials > Access Keys (Access Key ID and Secret Access Key)
+
+	# make ec2 instanace with Ubuntu Server 16.04 LTS
+	# set your pem file and aws ec2 ip address 
+	export PEM=topzone_ca1
+	export AWS_EC2_IP_ADDRESS=54.153.115.68
 ```
 
--. build a server
+-. set up on aws
 ```
-	- password: passwd123
-	<for Vagrant>
-		vagrant destroy -f && vagrant up
-		vagrant ssh
-		cf. all scripts
-			/tz-wordpress/scripts/wordpress.sh
-		
-	<for AWS>
-		# make ec2 instanace with Ubuntu Server 16.04 LTS
-		# set your pem file and aws ec2 ip address 
-		export PEM=topzone_ca1
-		export AWS_EC2_IP_ADDRESS=54.153.115.68
-		bash aws.sh
-		cf. all scripts
-			/tz-wordpress/scripts/run_aws.sh
-			/tz-wordpress/scripts/wordpress.sh
-		cf. access to terminal after opening firewal for the ec2 instance
-			cd ~/.ssh
-			chmod 600 $PEM.pem
-			ssh -i $PEM.pem ubuntu@$AWS_EC2_IP_ADDRESS
+	bash aws.sh
+	cf. all scripts
+		/tz-wordpress/scripts/run_aws.sh
+		/tz-wordpress/scripts/wordpress.sh
+	cf. access to terminal after opening firewal for the ec2 instance
+		cd ~/.ssh
+		chmod 600 $PEM.pem
+		ssh -i $PEM.pem ubuntu@$AWS_EC2_IP_ADDRESS
 ```
 
 ## Other INFOs
@@ -103,6 +100,7 @@ make an aws s3 bucket as wordpress media repository.
 ```
 
 -. Test
+	- password: passwd123
 	https://192.168.82.170
 
 
