@@ -3,6 +3,23 @@
 install a wordpress server with ubuntu 16.04, MySQL, nginx, php 7.0. 
 make an aws s3 bucket as wordpress media repository.
 
+## Run on Vagrant
+-. prep.
+```
+    - install vagrant
+        https://www.vagrantup.com/downloads.html
+    - install virtualbox
+        https://www.virtualbox.org/
+
+```
+-. set up on vagrant
+```
+    git clone https://github.com/doohee323/tz-wordpress
+    cd tz-wordpress
+    vagrant up
+```
+
+## Run on AWS
 -. register AWS Access key
 ```
 	export AWS_KEY=11111111111111111111:1111111111111111111111111111111111111111
@@ -33,6 +50,7 @@ make an aws s3 bucket as wordpress media repository.
 			ssh -i $PEM.pem ubuntu@$AWS_EC2_IP_ADDRESS
 ```
 
+## Other INFOs
 -. install plugins
 ```
 	cd /vagrant/wordpress
