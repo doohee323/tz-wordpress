@@ -5,7 +5,7 @@ server {
     root /usr/share/nginx/html;
     index index.php index.html index.htm;
 
-    server_name topzone.biz;
+    #server_name topzone.biz;
 
     location / {
         try_files $uri $uri/ /index.php?$query_string;

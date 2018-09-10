@@ -33,8 +33,7 @@ echo "mysql-server-5.6 mysql-server/root_password password passwd123" | sudo deb
 echo "mysql-server-5.6 mysql-server/root_password_again password passwd123" | sudo debconf-set-selections
 sudo apt-get install mysql-server-5.6 -y
 
-if [ -f "/etc/mysql/my.cnf" ]
-then
+if [ -f "/etc/mysql/my.cnf" ];then
     sudo sed -i "s/bind-address/#bind-address/g" /etc/mysql/my.cnf
 else
     sudo sed -i "s/bind-address/#bind-address/g" /etc/mysql/mysql.conf.d/mysqld.cnf
@@ -78,19 +77,20 @@ sudo service iptables restart
 ### [install wordpress] ############################################################################################################
 su - $USER
 
+sudo mkdir -p $PROJ_DIR
 cd $PROJ_DIR
-wget http://wordpress.org/latest.tar.gz
-tar xzvf latest.tar.gz
-apt-get install php5-gd libssh2-php -y
+rm -Rf latest.tar.gz
+sudo wget http://wordpress.org/latest.tar.gz
+sudo tar xzvf latest.tar.gz
+sudo apt-get install php5-gd libssh2-php -y
 
 cd $PROJ_DIR/wordpress
-cp wp-config-sample.php wp-config.php
+sudo cp wp-config-sample.php wp-config.php
 
-sed -i "s/database_name_here/wordpress/g" $PROJ_DIR/wordpress/wp-config.php
-sed -i "s/username_here/wordpressuser/g" $PROJ_DIR/wordpress/wp-config.php
-sed -i "s/password_here/passwd123/g" $PROJ_DIR/wordpress/wp-config.php
+sudo sed -i "s/database_name_here/wordpress/g" $PROJ_DIR/wordpress/wp-config.php
+sudo sed -i "s/username_here/wordpressuser/g" $PROJ_DIR/wordpress/wp-config.php
+sudo sed -i "s/password_here/passwd123/g" $PROJ_DIR/wordpress/wp-config.php
 
-sudo mkdir -p /vagrant
 sudo rsync -avP $PROJ_DIR/wordpress/ /usr/share/nginx/html/
 cat <(crontab -l) <(echo "* * * * * sudo rsync -avP $PROJ_DIR/wordpress/ /usr/share/nginx/html/ && sudo chown -Rf www-data:www-data /usr/share/nginx/html") | crontab -
 
@@ -104,17 +104,16 @@ echo -e "www-data\nwww-data" | sudo passwd www-data
 sudo chown -R www-data:www-data /usr/share/nginx/html/
 
 ### [install ftp] ############################################################################################################
-apt-get install vsftpd
-sed -i "s/anonymous_enable=YES/anonymous_enable=NO/g" /etc/vsftpd.conf
-sed -i "s/local_enable=NO/local_enable=YES/g" /etc/vsftpd.conf
-sed -i "s/#write_enable=YES/write_enable=YES/g" /etc/vsftpd.conf
-sed -i "s/pam_service_name=vsftpd/pam_service_name=ftp/g" /etc/vsftpd.conf
+sudo apt-get install vsftpd -y
+sudo sed -i "s/anonymous_enable=YES/anonymous_enable=NO/g" /etc/vsftpd.conf
+sudo sed -i "s/local_enable=NO/local_enable=YES/g" /etc/vsftpd.conf
+sudo sed -i "s/#write_enable=YES/write_enable=YES/g" /etc/vsftpd.conf
+sudo sed -i "s/pam_service_name=vsftpd/pam_service_name=ftp/g" /etc/vsftpd.conf
 sudo sh -c "echo www-data >> /etc/ftpusers"
 
 ### [install s3] ############################################################################################################
 sudo mkdir -p /usr/share/nginx/html/wp-content/uploads
-if [ $1 == "aws" ]
-then
+if [ $1 == "aws" ];then
     cd
     sudo apt-get install automake autotools-dev g++ git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev make pkg-config -y
     git clone https://github.com/s3fs-fuse/s3fs-fuse.git
@@ -133,6 +132,8 @@ then
     # sudo fusermount -u /usr/share/nginx/html/wp-content/uploads
     # cf. s3fs topzone /usr/share/nginx/html/wp-content/uploads -o passwd_file=/etc/passwd-s3fs -d -d -f -o f2 -o curldbg
     sudo echo "topzone /usr/share/nginx/html/wp-content/uploads fuse.s3fs _netdev,allow_other,dbglevel=dbg,curldbg 0 0" >> /etc/fstab
+elif [ $1 == "gcp" ];then
+	echo "Not ready!!!"
 else 
     chown -Rf www-data:www-data /usr/share/nginx/html/wp-content/uploads
 fi
@@ -151,11 +152,25 @@ sudo service php7.0-fpm restart
 
 ### [install wp-cli ] ############################################################################################################
 
-su - vagrant
+cd $HOME_DIR
 
 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 php wp-cli.phar --info
-chmod +x wp-cli.phar
+sudo chmod +x wp-cli.phar
 sudo mv wp-cli.phar /usr/local/bin/wp
 
 exit 0
+
+
+#vi /etc/php/7.0/fpm/php.ini
+display_errors = On
+display_startup_errors = On
+log_errors = On
+error_reporting = E_ALL
+display_errors = On
+
+sudo service php7.0-fpm restart
+#tail -f /var/log/syslog
+# vi /usr/share/nginx/churchinfo/
+vi /usr/share/nginx/churchinfo/phpinfo.php
+http://admin.new-nation.church/churchinfo/phpinfo.php
