@@ -70,8 +70,8 @@ cat <<EOT > /etc/apache2/sites-available/wordpress.conf
 <VirtualHost *:80>
      ServerAdmin admin@local.com
      DocumentRoot /var/www/html/
-     ServerName local.com
-     ServerAlias vm.local.com
+     #ServerName local.com
+     #ServerAlias vm.local.com
 
      <Directory /var/www/html/>
         Options +FollowSymlinks
@@ -79,8 +79,8 @@ cat <<EOT > /etc/apache2/sites-available/wordpress.conf
         Require all granted
      </Directory>
 
-     ErrorLog /var/log/error.log
-     CustomLog /var/log/access.log combined
+     ErrorLog /var/log/apache2/error.log
+     CustomLog /var/log/apache2/access.log combined
 </VirtualHost>
 
 EOT
@@ -96,16 +96,6 @@ sudo a2enmod php7.1
 
 service apache2 restart
 
-### [open firewalls] ############################################################################################################
-sudo ufw allow "Nginx Full"
-sudo iptables -I INPUT -p tcp --dport 21 -j ACCEPT
-sudo iptables -I INPUT -p tcp --dport 22 -j ACCEPT
-sudo iptables -I INPUT -p tcp --dport 80 -j ACCEPT
-sudo iptables -I INPUT -p tcp --dport 443 -j ACCEPT
-sudo iptables -I INPUT -p tcp --dport 3306 -j ACCEPT
-sudo service iptables save
-sudo service iptables restart
-
 ### [install wordpress] ############################################################################################################
 su - $USER
 
@@ -114,7 +104,8 @@ cd $PROJ_DIR
 rm -Rf latest.tar.gz
 sudo wget http://wordpress.org/latest.tar.gz
 sudo tar xzvf latest.tar.gz
-sudo apt-get install php5-gd libssh2-php -y
+sudo apt-get install php7.1-gd -y
+sudo apt-get install libssh2-php -y
 
 cd $PROJ_DIR/wordpress
 sudo cp wp-config-sample.php wp-config.php
@@ -132,6 +123,20 @@ sudo mkdir -p $PROJ_DIR/wordpress
 sudo usermod -a -G www-data www-data
 sudo usermod --home $PROJ_DIR/wordpress/ www-data
 echo -e "www-data\nwww-data" | sudo passwd www-data
+
+cat <<EOT > /var/www/html/.htaccess
+# BEGIN WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+
+# END WordPress
+EOT
 
 sudo chown -R www-data:www-data /var/www/html/
 
@@ -202,3 +207,35 @@ display_errors = On
 
 sudo service php7.1-fpm restart
 #tail -f /var/log/syslog
+
+### [https ] ############################################################################################################
+wget https://dl.eff.org/certbot-auto
+mv certbot-auto /usr/local/bin
+chmod a+x /usr/local/bin/certbot-auto
+
+# certbot-auto delete
+# service apache2 restart
+certbot-auto certonly \
+  --agree-tos \
+  --apache \
+  --non-interactive \
+  --redirect \
+  --text \
+  --email doohee323@gmail.com \
+  --webroot-path /var/www/html \
+  --domains "dev.new-nation.church"
+
+crontab -e
+0,10 0 * * *   /root/certbot-auto renew --quiet --no-self-upgrade
+
+### [open firewalls] ############################################################################################################
+#sudo ufw allow "Nginx Full"
+#sudo iptables -I INPUT -p tcp --dport 21 -j ACCEPT
+#sudo iptables -I INPUT -p tcp --dport 22 -j ACCEPT
+#sudo iptables -I INPUT -p tcp --dport 80 -j ACCEPT
+#sudo iptables -I INPUT -p tcp --dport 443 -j ACCEPT
+#sudo iptables -I INPUT -p tcp --dport 3306 -j ACCEPT
+#sudo service iptables save
+#sudo service iptables restart
+
+
