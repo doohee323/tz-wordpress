@@ -65,16 +65,6 @@ sudo sed -i "s/max_input_time = 300/max_input_time = 24000/g" /etc/php/7.1/fpm/p
 sudo sed -i "s/memory_limit = 128MB/memory_limit = 2048M/g" /etc/php/7.1/fpm/php.ini
 sudo service php7.1-fpm stop 
 
-### [open firewalls] ############################################################################################################
-sudo ufw allow "Nginx Full"
-sudo iptables -I INPUT -p tcp --dport 21 -j ACCEPT
-sudo iptables -I INPUT -p tcp --dport 22 -j ACCEPT
-sudo iptables -I INPUT -p tcp --dport 80 -j ACCEPT
-sudo iptables -I INPUT -p tcp --dport 443 -j ACCEPT
-sudo iptables -I INPUT -p tcp --dport 3306 -j ACCEPT
-sudo service iptables save
-sudo service iptables restart
-
 ### [install wordpress] ############################################################################################################
 su - $USER
 
@@ -175,3 +165,14 @@ sudo service php7.1-fpm restart
 # vi /usr/share/nginx/churchinfo/
 vi /usr/share/nginx/churchinfo/phpinfo.php
 http://admin.new-nation.church/churchinfo/phpinfo.php
+
+
+### [open firewalls] ############################################################################################################
+sudo ufw allow "Nginx Full"
+sudo iptables -I INPUT -p tcp --dport 21 -j ACCEPT
+sudo iptables -I INPUT -p tcp --dport 22 -j ACCEPT
+sudo iptables -I INPUT -p tcp --dport 80 -j ACCEPT
+sudo iptables -I INPUT -p tcp --dport 443 -j ACCEPT
+sudo iptables -I INPUT -p tcp --dport 3306 -j ACCEPT
+sudo service iptables save
+sudo service iptables restart

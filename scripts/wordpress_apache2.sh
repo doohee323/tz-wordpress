@@ -116,6 +116,7 @@ sudo sed -i "s/password_here/passwd123/g" $PROJ_DIR/wordpress/wp-config.php
 
 sudo rsync -avP $PROJ_DIR/wordpress/ /var/www/html/
 cat <(crontab -l) <(echo "* * * * * sudo rsync -avP $PROJ_DIR/wordpress/ /var/www/html/ && sudo chown -Rf www-data:www-data /var/www/html") | crontab -
+cat <(crontab -l) <(echo "* * * * * cd /var/www/html/wp-content/uploads; sudo find . -name \*.mp3 -exec cp {} /var/www/html/pod \;") | crontab -
 
 sudo mkdir -p $PROJ_DIR/wordpress
 #sudo userdel www-data
@@ -126,6 +127,8 @@ echo -e "www-data\nwww-data" | sudo passwd www-data
 
 cat <<EOT > /var/www/html/.htaccess
 # BEGIN WordPress
+php_value post_max_size 100M
+php_value upload_max_filesize 100M
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteBase /
