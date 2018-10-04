@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -x
+
 ssh -i ~/.ssh/$PEM.pem ubuntu@$AWS_EC2_IP_ADDRESS 'rm -Rf /home/ubuntu/resources && rm -Rf /home/ubuntu/scripts && mkdir /home/ubuntu/resources';
 scp -i ~/.ssh/$PEM.pem -r ./resources/nginx ubuntu@$AWS_EC2_IP_ADDRESS:/home/ubuntu/resources/nginx
 scp -i ~/.ssh/$PEM.pem -r ./scripts ubuntu@$AWS_EC2_IP_ADDRESS:/home/ubuntu/scripts

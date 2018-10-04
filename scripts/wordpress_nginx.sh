@@ -16,7 +16,7 @@ source $HOME_DIR/.bashrc
 
 sudo apt-get install software-properties-common -y
 sudo add-apt-repository ppa:ondrej/php -y
-sudo add-apt-repository ppa:ondrej/mysql-5.6 -y
+sudo add-apt-repository ppa:ondrej/mysql-5.7 -y
 sudo apt-get update
 
 ### [install nginx] ############################################################################################################
@@ -29,9 +29,9 @@ sudo service nginx stop
 sudo nginx -s stop
 
 ### [install mysql] ############################################################################################################
-echo "mysql-server-5.6 mysql-server/root_password password passwd123" | sudo debconf-set-selections
-echo "mysql-server-5.6 mysql-server/root_password_again password passwd123" | sudo debconf-set-selections
-sudo apt-get install mysql-server-5.6 -y
+echo "mysql-server-5.7 mysql-server/root_password password passwd123" | sudo debconf-set-selections
+echo "mysql-server-5.7 mysql-server/root_password_again password passwd123" | sudo debconf-set-selections
+sudo apt-get install mysql-server-5.7 -y
 
 if [ -f "/etc/mysql/my.cnf" ];then
     sudo sed -i "s/bind-address/#bind-address/g" /etc/mysql/my.cnf

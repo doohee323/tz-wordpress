@@ -12,17 +12,18 @@ sudo sh -c "echo '' >> $HOME_DIR/.bashrc"
 sudo sh -c "echo 'export PATH=$PATH:.' >> $HOME_DIR/.bashrc"
 sudo sh -c "echo 'export HOME_DIR='$HOME_DIR >> $HOME_DIR/.bashrc"
 sudo sh -c "echo 'export SRC_DIR='$SRC_DIR >> $HOME_DIR/.bashrc"
+sudo sh -c "echo 'export PROJ_DIR='$PROJ_DIR >> $HOME_DIR/.bashrc"
 source $HOME_DIR/.bashrc
 
 sudo apt-get install software-properties-common -y
 sudo add-apt-repository ppa:ondrej/php -y
-sudo add-apt-repository ppa:ondrej/mysql-5.6 -y
+sudo add-apt-repository ppa:ondrej/mysql-5.7 -y
 sudo apt-get update
 
 ### [install mysql] ############################################################################################################
-echo "mysql-server-5.6 mysql-server/root_password password passwd123" | sudo debconf-set-selections
-echo "mysql-server-5.6 mysql-server/root_password_again password passwd123" | sudo debconf-set-selections
-sudo apt-get install mysql-server-5.6 -y
+echo "mysql-server-5.7 mysql-server/root_password password passwd123" | sudo debconf-set-selections
+echo "mysql-server-5.7 mysql-server/root_password_again password passwd123" | sudo debconf-set-selections
+sudo apt-get install mysql-server-5.7 -y
 
 if [ -f "/etc/mysql/my.cnf" ];then
     sudo sed -i "s/bind-address/#bind-address/g" /etc/mysql/my.cnf
@@ -88,8 +89,6 @@ EOT
 rm -Rf /etc/apache2/sites-enabled/000-default.conf
 ln -s /etc/apache2/sites-available/wordpress.conf /etc/apache2/sites-enabled/wordpress.conf
 
-rm -rf /var/www/html/index.html
-
 sudo a2ensite wordpress.conf
 sudo a2enmod rewrite
 sudo a2enmod php7.1
@@ -142,6 +141,7 @@ RewriteRule . /index.php [L]
 EOT
 
 sudo chown -R www-data:www-data /var/www/html/
+sudo rm -rf /var/www/html/index.html
 
 ### [install ftp] ############################################################################################################
 sudo apt-get install vsftpd -y
@@ -186,6 +186,7 @@ sudo /etc/init.d/mysql restart
 
 sudo service vsftpd restart
 sudo service php7.1-fpm restart
+sudo service apache2 restart
 
 #curl http://192.168.82.170
 

@@ -1,6 +1,6 @@
 # Run a Wordpress server on Vagrant / AWS / GCP 
 
-install a wordpress server with ubuntu 16.04, MySQL, nginx, php 7.0. 
+install a wordpress server with ubuntu 18.04, MySQL, apache2/nginx, php 7.1. 
 make an aws s3 bucket as wordpress media repository.
 
 ## Run on Vagrant
@@ -23,20 +23,17 @@ make an aws s3 bucket as wordpress media repository.
 ```
 
 ## Run on AWS
--. prep.
 ```
 	- register AWS Access key
-	export AWS_KEY=11111111111111111111:1111111111111111111111111111111111111111
+	"# AWS Access Key ID [None]: xxxxxxxxxxxxxxxxxxxx
+	export AWS_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 	cf. on aws console, Your Security Credentials > Access Keys (Access Key ID and Secret Access Key)
 
-	# make ec2 instanace with Ubuntu Server 16.04 LTS
+	# make ec2 instanace with Ubuntu Server 18.04 LTS
 	# set your pem file and aws ec2 ip address 
-	export PEM=topzone_ca1
-	export AWS_EC2_IP_ADDRESS=54.153.115.68
-```
+	export PEM=xxx   # ex) xxx.pem
+	export AWS_EC2_IP_ADDRESS=xxx.xxx.xxx.xxx
 
--. set up on aws
-```
 	bash aws.sh
 	cf. all scripts
 		/tz-wordpress/scripts/run_aws.sh
@@ -51,7 +48,7 @@ make an aws s3 bucket as wordpress media repository.
 -. prep.
 ```
 	* connect to gcp instance with ssh
-	# make gcp instanace with Ubuntu Server 16.04 LTS
+	# make gcp instanace with Ubuntu Server 18.04 LTS
 	# make and register your public key in gcp metadata ssh
 
 	e.g.
