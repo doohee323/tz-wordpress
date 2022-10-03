@@ -3,3 +3,8 @@
 /latest.tar.gz
 .bashrc
 .DS_Store
+
+constant-tracer-224322
+constant-tracer-224322.pub
+google-key.json
+.terraform.lock.hcl
