@@ -2,6 +2,8 @@
 
 set -x
 
+exit 0
+
 export USER=vagrant  # for vagrant
 export PROJ_NAME=wordpress
 export HOME_DIR=/home/$USER

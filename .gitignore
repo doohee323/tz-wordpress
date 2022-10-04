@@ -8,3 +8,12 @@ constant-tracer-224322
 constant-tracer-224322.pub
 google-key.json
 .terraform.lock.hcl
+terraform-google-cloud-examples
+terraform.tfvars
+terraform.tfstate
+terraform.tfstate.backup
+newnationchurch-323
+newnationchurch-323.pub
+terraform-account.json
+.terraform.lock.hcl
+projects/terraform-google-cloud-examples
