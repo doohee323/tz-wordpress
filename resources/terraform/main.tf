@@ -4,10 +4,10 @@ provider "google" {
   credentials = file(var.gcp_auth_file)
   zone        = var.gcp_zone
 }
-resource "google_project" "tz-project" {
-  name            = var.project_name
-  project_id      = var.gcp_project
-}
+//resource "google_project" "tz-project" {
+//  name            = var.project_name
+//  project_id      = var.gcp_project
+//}
 //resource "google_project_service" "project" {
 //  project = var.gcp_project
 //  service = "iam.googleapis.com"
@@ -24,7 +24,6 @@ resource "google_compute_instance" "dev" {
   machine_type = var.linux_instance_type
   zone         = var.gcp_zone
   hostname     = var.hostname
-//  tags         = ["externalssh","web-server"]
   tags         = ["web-server"]
   boot_disk {
     initialize_params {
@@ -67,9 +66,9 @@ resource "google_project_service" "services" {
   service                    = each.key
   disable_dependent_services = false
   disable_on_destroy         = false
-  depends_on = [google_project.tz-project]
+//  depends_on = [google_project.tz-project]
 }
 
 output "public_ip" {
-  value = "${google_compute_instance.dev.network_interface.0.access_config.0.nat_ip}"
+  value = google_compute_instance.dev.network_interface.0.access_config.0.nat_ip
 }

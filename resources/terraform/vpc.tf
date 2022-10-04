@@ -37,17 +37,17 @@ resource "google_compute_subnetwork" "tz_sub" {
 ######################
 # Firewall
 ######################
-resource "google_compute_firewall" "firewall" {
-  project     = data.google_client_config.current.project
-  name    = "gritfy-firewall-externalssh"
-  network = "default"
-  allow {
-    protocol = "tcp"
-    ports    = ["22"]
-  }
-  source_ranges = ["0.0.0.0/0"] # Not So Secure. Limit the Source Range
-  target_tags   = ["externalssh"]
-}
+//resource "google_compute_firewall" "firewall" {
+//  project     = data.google_client_config.current.project
+//  name    = "gritfy-firewall-externalssh"
+//  network = "default"
+//  allow {
+//    protocol = "tcp"
+//    ports    = ["22"]
+//  }
+//  source_ranges = ["0.0.0.0/0"] # Not So Secure. Limit the Source Range
+//  target_tags   = ["externalssh"]
+//}
 resource "google_compute_firewall" "web-server" {
   project     = data.google_client_config.current.project  # you can Replace this with your project ID in quotes var.project_id
   name        = "allow-http-rule"
@@ -55,7 +55,7 @@ resource "google_compute_firewall" "web-server" {
   description = "Creates firewall rule targeting tagged instances"
   allow {
     protocol = "tcp"
-    ports    = ["80","443"]
+    ports    = ["22", "80","443"]
   }
   source_ranges = ["0.0.0.0/0"]
   target_tags = ["web-server"]
