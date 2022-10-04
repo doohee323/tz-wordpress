@@ -10,7 +10,7 @@ variable "gcp_zone" {
 }
 variable "gcp_project" {
     type = string
-    default = "extreme-signer-364421"
+    default = "newnationchurch-3231"
 }
 variable "project_name" {
     type = string
@@ -26,15 +26,15 @@ variable "user" {
 }
 variable "tf_service_account" {
     type = string
-    default = "terraform-account@extreme-signer-364421.iam.gserviceaccount.com"
+    default = "tz-serviceaccount@newnationchurch-3231.iam.gserviceaccount.com"
 }
 variable "privatekeypath" {
     type = string
-    default = "newnationchurch-323"
+    default = "newnationchurch-3231"
 }
 variable "publickeypath" {
     type = string
-    default = "newnationchurch-323.pub"
+    default = "newnationchurch-3231.pub"
 }
 variable "network-subnet-cidr" {
   type        = string
@@ -48,7 +48,7 @@ variable "ubuntu_2004_sku" {
 variable "linux_instance_type" {
   type        = string
   description = "VM instance type for Linux Server"
-  default     = "f1-micro"
+  default     = "e2‑small"
 }
 variable "gcp_auth_file" {
   type        = string
