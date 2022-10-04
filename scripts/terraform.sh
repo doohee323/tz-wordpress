@@ -6,23 +6,26 @@
 
 set -x
 
-alias tapply='terraform apply -auto-approve'
-
 cd /vagrant/resources/terraform
 #export GOOGLE_APPLICATION_CREDENTIALS="/vagrant/projects/terraform-google-cloud-examples/terraform-account.json"
 #export GOOGLE_CREDENTIALS="$(cat /vagrant/projects/terraform-google-cloud-examples/terraform-account.json)"
 
-tz_account=doohee323@new-nation.church
-PROJECT_ID=newnationchurch-3233
-tz_region=us-west2
-tz_zone=us-west2-a
+TZ_ACCOUNT=doohee323@new-nation.church
+PROJECT_NAME=newnationchurch
+PROJECT_ID=${PROJECT_NAME}-3238
+TZ_REGION=us-west2
+TZ_ZONE=us-west2-a
 
 #gcloud init
-gcloud config configurations list
-gcloud config configurations create newnationchurch
-gcloud config configurations activate newnationchurch
-gcloud config set core/account doohee323@new-nation.church
+echo "get an authentication to click the link in CLI."
 gcloud auth login
+
+exit 0
+
+gcloud config configurations list
+#gcloud config configurations delete ${PROJECT_NAME}
+gcloud config configurations create ${PROJECT_NAME}
+gcloud config configurations activate ${PROJECT_NAME}
 
 gcloud info --format flattened
 gcloud organizations list
@@ -31,6 +34,10 @@ echo "ORG_ID: ${ORG_ID}"
 
 gcloud projects create ${PROJECT_ID} --organization=${ORG_ID} # --folder=${FOLDER_ID}
 gcloud projects list --filter "parent.id=${ORG_ID} AND  parent.type=organization"
+gcloud config set project ${PROJECT_ID}
+gcloud config set core/account ${TZ_ACCOUNT}
+gcloud config set compute/region ${TZ_REGION}
+gcloud config set compute/zone ${TZ_ZONE}
 
 BILLING_ACCOUNT_ID=`gcloud beta billing accounts list | tail -n 1 | awk '{print $1}'`
 echo "BILLING_ACCOUNT_ID: ${BILLING_ACCOUNT_ID}"
@@ -47,20 +54,16 @@ gcloud services enable \
   container \
   --project ${PROJECT_ID}
 
-gcloud config set project ${PROJECT_ID}
-gcloud config set compute/region ${tz_region}
-gcloud config set compute/zone ${tz_zone}
-
 gcloud compute zones list --filter=region:us-west2
 #gcloud compute regions list
 
-alias tzconfig="gcloud config set account ${tz_account} && \
+alias tzconfig="gcloud config set account ${TZ_ACCOUNT} && \
   gcloud config set project ${PROJECT_ID} && \
-  gcloud config set compute/region ${tz_region} &&
-  gcloud config set compute/zone ${tz_zone}"
+  gcloud config set compute/region ${TZ_REGION} &&
+  gcloud config set compute/zone ${TZ_ZONE}"
 
 gcloud projects add-iam-policy-binding ${PROJECT_ID} \
-  --member="user:${tz_account}" \
+  --member="user:${TZ_ACCOUNT}" \
   --role=roles/resourcemanager.projectIamAdmin \
   --role=roles/compute.orgSecurityResourceAdmin \
   --role=roles/iam.serviceAccountUser \
@@ -123,6 +126,8 @@ export GOOGLE_APPLICATION_CREDENTIALS="/vagrant/resources/google-key.json"
 
 terraform init
 terraform plan
+
+alias tapply='terraform apply -auto-approve'
 tapply
 
 gcloud compute instances list
@@ -136,8 +141,21 @@ Host 34.94.153.38
   LogLevel                ERROR
   UserKnownHostsFile      /dev/null
   IdentitiesOnly yes
-  IdentityFile ~/.ssh/newnationchurch-3233
+  IdentityFile ~/.ssh/newnationchurch-3234
 
 ssh ubuntu@34.94.153.38
 
+#################################
+
+cd /vagrant/resources/terraform
+terraform destroy -auto-approve
+
+rm -Rf .terraform
+rm -Rf .terraform.lock.hcl
+rm -Rf terraform.tfstate
+rm -Rf terraform.tfstate.backup
+
+gcloud iam service-accounts delete ${SERVICE_ACCOUNT} -q
+gcloud projects delete --quiet ${PROJECT_ID} -q
+rm -Rf /home/vagrant/.config
 

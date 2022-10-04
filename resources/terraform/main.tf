@@ -1,14 +1,14 @@
 terraform {
   required_version = ">= 0.11.5"
 
-  backend "gcs" {
-    bucket = "newnationchurch-3233-state"
-    prefix      = "tz-tfsate"
-  }
+//  backend "gcs" {
+//    bucket = "newnationchurch-3235-state"
+//    prefix      = "tz-tfsate"
+//  }
 }
 
 resource "google_storage_bucket" "terraform_state" {
-  name     = "newnationchurch-3233-state"
+  name     = "${var.gcp_project}-state"
   location = var.gcp_region
   force_destroy = true
   versioning {
