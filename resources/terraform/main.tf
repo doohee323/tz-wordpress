@@ -1,9 +1,28 @@
+terraform {
+  required_version = ">= 0.11.5"
+
+  backend "gcs" {
+    bucket = "newnationchurch-3233-state"
+    prefix      = "tz-tfsate"
+  }
+}
+
+resource "google_storage_bucket" "terraform_state" {
+  name     = "newnationchurch-3233-state"
+  location = var.gcp_region
+  force_destroy = true
+  versioning {
+    enabled = true
+  }
+}
+
 provider "google" {
   project = var.gcp_project
   region  = var.gcp_region
   credentials = file(var.gcp_auth_file)
   zone        = var.gcp_zone
 }
+
 //resource "google_project" "tz-project" {
 //  name            = var.project_name
 //  project_id      = var.gcp_project

@@ -10,7 +10,7 @@ variable "gcp_zone" {
 }
 variable "gcp_project" {
     type = string
-    default = "newnationchurch-3232"
+    default = "newnationchurch-3233"
 }
 variable "project_name" {
     type = string
@@ -26,15 +26,15 @@ variable "user" {
 }
 variable "tf_service_account" {
     type = string
-    default = "tz-serviceaccount@newnationchurch-3232.iam.gserviceaccount.com"
+    default = "tz-serviceaccount@newnationchurch-3233.iam.gserviceaccount.com"
 }
 variable "privatekeypath" {
     type = string
-    default = "newnationchurch-3232"
+    default = "newnationchurch-3233"
 }
 variable "publickeypath" {
     type = string
-    default = "newnationchurch-3232.pub"
+    default = "newnationchurch-3233.pub"
 }
 variable "network-subnet-cidr" {
   type        = string
