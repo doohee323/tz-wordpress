@@ -17,3 +17,4 @@ terraform-account.json
 .terraform.tfstate.lock.info
 authorized_keys
 newnationchurch-3*
+errored.tfstate
