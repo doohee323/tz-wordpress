@@ -7,20 +7,23 @@
 set -x
 
 cd /vagrant/resources/terraform
-#export GOOGLE_APPLICATION_CREDENTIALS="/vagrant/projects/terraform-google-cloud-examples/terraform-account.json"
-#export GOOGLE_CREDENTIALS="$(cat /vagrant/projects/terraform-google-cloud-examples/terraform-account.json)"
+#export GOOGLE_APPLICATION_CREDENTIALS="/vagrant/terraform/google-key.json"
+#export GOOGLE_CREDENTIALS="$(cat /vagrant/terraform/google-key.json)"
 
 TZ_ACCOUNT=doohee323@new-nation.church
 PROJECT_NAME=newnationchurch
-PROJECT_ID=${PROJECT_NAME}-3238
+PROJECT_ID=${PROJECT_NAME}-3239
 TZ_REGION=us-west2
 TZ_ZONE=us-west2-a
+
+cp -Rf /vagrant/terraform/terraform.tfvars_template /vagrant/terraform/terraform.tfvars
+sed -i "s/PROJECT_ID/${PROJECT_ID}/g" /vagrant/terraform/terraform.tfvars
 
 #gcloud init
 echo "get an authentication to click the link in CLI."
 gcloud auth login
 
-exit 0
+sleep 20
 
 gcloud config configurations list
 #gcloud config configurations delete ${PROJECT_NAME}
@@ -54,7 +57,7 @@ gcloud services enable \
   container \
   --project ${PROJECT_ID}
 
-gcloud compute zones list --filter=region:us-west2
+gcloud compute zones list --filter=region:${TZ_REGION}
 #gcloud compute regions list
 
 alias tzconfig="gcloud config set account ${TZ_ACCOUNT} && \
@@ -132,18 +135,23 @@ tapply
 
 gcloud compute instances list
 
-terraform destroy -auto-approve
+public_ip=$(terraform output | grep "public_ip" | awk '{print $3}' | sed 's/"//g')
 
-exit 0
-
-Host 34.94.153.38
+echo "
+Host ${public_ip}
   StrictHostKeyChecking   no
   LogLevel                ERROR
   UserKnownHostsFile      /dev/null
   IdentitiesOnly yes
-  IdentityFile ~/.ssh/newnationchurch-3234
+  IdentityFile /home/vagrant/.ssh/${PROJECT_ID}
+" > ~/.ssh/config
 
-ssh ubuntu@34.94.153.38
+echo ssh ubuntu@${public_ip}
+
+# terraform destroy -auto-approve
+
+exit 0
+
 
 #################################
 

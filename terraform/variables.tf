@@ -10,7 +10,7 @@ variable "gcp_zone" {
 }
 variable "gcp_project" {
     type = string
-    default = "newnationchurch-3238"
+    default = "newnationchurch-3239"
 }
 variable "project_name" {
     type = string
@@ -53,7 +53,7 @@ variable "linux_instance_type" {
 variable "gcp_auth_file" {
   type        = string
   description = "GCP authentication file"
-  default     = "../google-key.json"
+  default     = "google-key.json"
 }
 variable "app_domain" {
   type        = string

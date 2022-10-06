@@ -1,0 +1,18 @@
+# Application Definition
+#company     = "newnationchurch"
+#app_name    = "iac-ubuntu"
+#environment = "dev" # Dev, Test, Prod, etc
+
+app_domain  = "new-nation.church"
+hostname = "newnationchurch.new-nation.church"
+gcp_region    = "us-west2"
+gcp_zone      = "us-west2-a"
+gcp_auth_file = "google-key.json"
+network-subnet-cidr = "10.10.10.0/24"
+linux_instance_type = "e2-highcpu-2"
+
+gcp_project   = "PROJECT_ID"
+privatekeypath   = "PROJECT_ID"
+publickeypath   = "PROJECT_ID.pub"
+tf_service_account = "tz-serviceaccount@PROJECT_ID.iam.gserviceaccount.com"
+

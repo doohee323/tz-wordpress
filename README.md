@@ -19,7 +19,7 @@ make an aws s3 bucket as wordpress media repository.
 	vagrant destroy -f && vagrant up
 	vagrant ssh
 	cf. all scripts
-		/tz-wordpress/scripts/wordpress.sh
+		/tz-wordpress/resources/wordpress.sh
 ```
 
 ## Run on AWS
@@ -37,7 +37,7 @@ make an aws s3 bucket as wordpress media repository.
 	bash aws.sh
 	cf. all scripts
 		/tz-wordpress/scripts/run_aws.sh
-		/tz-wordpress/scripts/wordpress.sh
+		/tz-wordpress/resources/wordpress.sh
 	cf. access to terminal after opening firewal for the ec2 instance
 		cd ~/.ssh
 		chmod 600 $PEM.pem
@@ -68,7 +68,7 @@ make an aws s3 bucket as wordpress media repository.
 	bash gcp.sh
 	cf. all scripts
 		/tz-wordpress/scripts/run_gcp.sh
-		/tz-wordpress/scripts/wordpress.sh
+		/tz-wordpress/resources/wordpress.sh
 	cf. access to terminal after opening firewal for the gcp instance
 		cd ~/.ssh
 		chmod 600 $PEM

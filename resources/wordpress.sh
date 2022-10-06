@@ -2,11 +2,11 @@
 
 set -x
 
-export USER=vagrant  # for vagrant
+export USER=ubuntu
 export PROJ_NAME=wordpress
 export HOME_DIR=/home/$USER
-export PROJ_DIR=/vagrant
-export SRC_DIR=/vagrant/resources  # for vagrant
+export PROJ_DIR=/home/ubuntu
+export SRC_DIR=/home/ubuntu/resources  # for home/ubuntu
 
 sudo sh -c "echo '' >> $HOME_DIR/.bashrc"
 sudo sh -c "echo 'export PATH=$PATH:.' >> $HOME_DIR/.bashrc"
@@ -21,9 +21,10 @@ sudo add-apt-repository ppa:ondrej/mysql-5.7 -y
 sudo apt-get update
 
 ### [install mysql] ############################################################################################################
-echo "mysql-server-5.7 mysql-server/root_password password passwd123" | sudo debconf-set-selections
-echo "mysql-server-5.7 mysql-server/root_password_again password passwd123" | sudo debconf-set-selections
-sudo apt-get install mysql-server-5.7 -y
+#echo "mysql-server-5.7 mysql-server/root_password password passwd123" | sudo debconf-set-selections
+#echo "mysql-server-5.7 mysql-server/root_password_again password passwd123" | sudo debconf-set-selections
+#sudo apt-get install mysql-server-5.7 -y
+sudo apt-get install mysql-server mysql-client libmysqlclient-dev -y
 
 if [ -f "/etc/mysql/my.cnf" ];then
     sudo sed -i "s/bind-address/#bind-address/g" /etc/mysql/my.cnf
@@ -71,8 +72,8 @@ cat <<EOT > /etc/apache2/sites-available/wordpress.conf
 <VirtualHost *:80>
      ServerAdmin admin@local.com
      DocumentRoot /var/www/html/
-     #ServerName local.com
-     #ServerAlias vm.local.com
+     #ServerName dev.new-nation.church
+     #ServerAlias dev.new-nation.church
 
      <Directory /var/www/html/>
         Options +FollowSymlinks
@@ -96,8 +97,6 @@ sudo a2enmod php7.1
 service apache2 restart
 
 ### [install wordpress] ############################################################################################################
-su - $USER
-
 sudo mkdir -p $PROJ_DIR
 cd $PROJ_DIR
 rm -Rf latest.tar.gz
@@ -181,7 +180,7 @@ fi
 
 ### [start services] ############################################################################################################
 
-sudo /etc/init.d/mysql restart  
+sudo /etc/init.d/mysql restart
 #mysql -h localhost -P 3306 -u root -p
 
 sudo service vsftpd restart
