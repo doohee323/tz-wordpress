@@ -1,6 +1,4 @@
-# Application Definition
 #company     = "newnationchurch"
-#app_name    = "iac-ubuntu"
 #environment = "dev" # Dev, Test, Prod, etc
 
 app_domain  = "new-nation.church"
@@ -9,7 +7,7 @@ gcp_region    = "us-west2"
 gcp_zone      = "us-west2-a"
 gcp_auth_file = "google-key.json"
 network-subnet-cidr = "10.10.10.0/24"
-linux_instance_type = "e2-highcpu-2"
+linux_instance_type = "e2-small"
 
 gcp_project   = "PROJECT_ID"
 privatekeypath   = "PROJECT_ID"

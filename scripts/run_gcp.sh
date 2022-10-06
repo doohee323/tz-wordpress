@@ -11,13 +11,25 @@ cd /vagrant/resources/terraform
 #export GOOGLE_CREDENTIALS="$(cat /vagrant/terraform/google-key.json)"
 
 TZ_ACCOUNT=doohee323@new-nation.church
-PROJECT_NAME=newnationchurch
-PROJECT_ID=${PROJECT_NAME}-3240
 if [ "${1}" != "" ]; then
-  PROJECT_ID=${PROJECT_NAME}-${1}
+  TZ_ACCOUNT=${1}
 fi
 TZ_REGION=us-west2
+if [ "${2}" != "" ]; then
+  TZ_REGION=${2}
+fi
 TZ_ZONE=us-west2-a
+if [ "${3}" != "" ]; then
+  TZ_ZONE=${3}
+fi
+PROJECT_NAME=newnationchurch
+if [ "${4}" != "" ]; then
+  PROJECT_NAME=${4}
+fi
+PROJECT_ID=${PROJECT_NAME}-3240
+if [ "${5}" != "" ]; then
+  PROJECT_ID=${PROJECT_NAME}-${5}
+fi
 
 cp -Rf /vagrant/terraform/terraform.tfvars_template /vagrant/terraform/terraform.tfvars
 sed -i "s/PROJECT_ID/${PROJECT_ID}/g" /vagrant/terraform/terraform.tfvars
@@ -164,7 +176,7 @@ echo ssh ubuntu@${public_ip}
 exit 0
 
 
-#################################
+### [ Remove all resources ] ##############################
 
 cd /vagrant/terraform
 terraform destroy -auto-approve

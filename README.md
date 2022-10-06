@@ -1,4 +1,4 @@
-# Run a Wordpress server on Vagrant / AWS / GCP 
+# Run a Wordpress server on Vagrant / AWS / GCP (by Terraform)
 
 install a wordpress server with ubuntu 18.04, MySQL, apache2/nginx, php 7.1. 
 make an aws s3 bucket as wordpress media repository.
@@ -47,32 +47,19 @@ make an aws s3 bucket as wordpress media repository.
 ## Run on GCP
 -. prep.
 ```
-	* connect to gcp instance with ssh
-	# make gcp instanace with Ubuntu Server 18.04 LTS
-	# make and register your public key in gcp metadata ssh
+	1. make GCP admin account and billing account
+    2. change terraform.tfvars_template
+    3. change run_gcp.sh
 
-	e.g.
-		sudo rm -Rf ~/.ssh/newnation*
-		ssh-keygen -t rsa -C ubuntu@gmail.com -P "" -f ~/.ssh/newnation -q 
-		chmod 400 ~/.ssh/newnation
-		cat ~/.ssh/newnation.pub
-		ssh -i ~/.ssh/newnation ubuntu@35.237.190.176 
-	 
-	#export GCP_KEY=11111111111111111111:1111111111111111111111111111111111111111
-	export PRIKEY=newnation
-	export GCP_IP_ADDRESS=35.237.190.176 
-```
+bash /vagrant/scripts/run_gcp.sh \
+  us-west2 \
+  us-west2-a \
+  doohee323@new-nation.church \
+  newnationchurch \
+  3240
 
--. set up on GCP
-```
-	bash gcp.sh
-	cf. all scripts
-		/tz-wordpress/scripts/run_gcp.sh
-		/tz-wordpress/resources/wordpress.sh
-	cf. access to terminal after opening firewal for the gcp instance
-		cd ~/.ssh
-		chmod 600 $PEM
-		ssh -i $PEM.pem ubuntu@$AWS_EC2_IP_ADDRESS
+    4. vagrant up
+
 ```
 
 ## Other INFOs
