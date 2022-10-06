@@ -48,6 +48,7 @@ make an aws s3 bucket as wordpress media repository.
 -. prep.
 ```
 	1. make GCP admin account and billing account
+        ex) doohee323@new-nation.church
     2. change terraform.tfvars_template
     3. change run_gcp.sh
 
