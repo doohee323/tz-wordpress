@@ -13,5 +13,5 @@ sudo apt-get update -y
 sudo apt install terraform=1.1.7
 terraform -v
 
-bash /vagrant/scripts/terraform.sh
+bash /vagrant/scripts/terraform.sh 3240
 

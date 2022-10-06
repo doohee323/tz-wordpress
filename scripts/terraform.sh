@@ -13,6 +13,9 @@ cd /vagrant/resources/terraform
 TZ_ACCOUNT=doohee323@new-nation.church
 PROJECT_NAME=newnationchurch
 PROJECT_ID=${PROJECT_NAME}-3239
+if [ "${1}" != "" ]; then
+  PROJECT_ID=${PROJECT_NAME}-${1}
+fi
 TZ_REGION=us-west2
 TZ_ZONE=us-west2-a
 
@@ -23,24 +26,27 @@ sed -i "s/PROJECT_ID/${PROJECT_ID}/g" /vagrant/terraform/terraform.tfvars
 echo "get an authentication to click the link in CLI."
 gcloud auth login
 
-sleep 20
-
 gcloud config configurations list
 #gcloud config configurations delete ${PROJECT_NAME}
 gcloud config configurations create ${PROJECT_NAME}
 gcloud config configurations activate ${PROJECT_NAME}
 
+echo "===== TZ_ACCOUNT: ${TZ_ACCOUNT}"
+echo "===== PROJECT_NAME: ${PROJECT_NAME}"
+echo "===== PROJECT_ID: ${PROJECT_ID}"
+echo "===== TZ_REGION: ${TZ_REGION}"
+echo "===== TZ_ZONE: ${TZ_ZONE}"
+sleep 5
+
 gcloud info --format flattened
 gcloud organizations list
 ORG_ID=$(gcloud organizations list --format 'value(ID)')
 echo "ORG_ID: ${ORG_ID}"
+sleep 10
 
 gcloud projects create ${PROJECT_ID} --organization=${ORG_ID} # --folder=${FOLDER_ID}
 gcloud projects list --filter "parent.id=${ORG_ID} AND  parent.type=organization"
 gcloud config set project ${PROJECT_ID}
-gcloud config set core/account ${TZ_ACCOUNT}
-gcloud config set compute/region ${TZ_REGION}
-gcloud config set compute/zone ${TZ_ZONE}
 
 BILLING_ACCOUNT_ID=`gcloud beta billing accounts list | tail -n 1 | awk '{print $1}'`
 echo "BILLING_ACCOUNT_ID: ${BILLING_ACCOUNT_ID}"
@@ -56,6 +62,10 @@ gcloud services enable \
   compute \
   container \
   --project ${PROJECT_ID}
+
+gcloud config set core/account ${TZ_ACCOUNT}
+gcloud config set compute/region ${TZ_REGION}
+gcloud config set compute/zone ${TZ_ZONE}
 
 gcloud compute zones list --filter=region:${TZ_REGION}
 #gcloud compute regions list
@@ -90,12 +100,12 @@ PROJECT_ID=$(gcloud config list project --format='value(core.project)')
 PROJECT_NUMBER=$(gcloud projects describe ${PROJECT_ID} --format="value(projectNumber)")
 gcloud projects list --uri
 
-gcloud iam service-accounts keys create /vagrant/resources/google-key.json \
+gcloud iam service-accounts keys create /vagrant/terraform/google-key.json \
   --iam-account ${SERVICE_ACCOUNT}
 #gcloud iam service-accounts keys list --iam-account ${SERVICE_ACCOUNT} | grep '9999-'
 #gcloud iam service-accounts keys delete a9cf19630c3cad5595493b3576dffdebdcb06d96 \
 #  --iam-account=${SERVICE_ACCOUNT}
-cat /vagrant/resources/google-key.json
+cat /vagrant/terraform/google-key.json
 
 cd ~/.ssh
 ssh-keygen -t rsa -C ${PROJECT_ID} -P "" -f ${PROJECT_ID} -q
@@ -124,8 +134,8 @@ gcloud projects add-iam-policy-binding ${PROJECT_ID} \
 gcloud compute instances list
 gcloud compute instances list --project=${PROJECT_ID}
 
-cd /vagrant/resources/terraform
-export GOOGLE_APPLICATION_CREDENTIALS="/vagrant/resources/google-key.json"
+cd /vagrant/terraform
+export GOOGLE_APPLICATION_CREDENTIALS="/vagrant/terraform/google-key.json"
 
 terraform init
 terraform plan
