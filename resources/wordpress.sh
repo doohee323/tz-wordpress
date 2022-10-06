@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# bash /home/ubuntu/resources/wordpress.sh
+
 set -x
 
 export USER=ubuntu
@@ -46,7 +48,7 @@ mysql -u root -ppasswd123 -e "SHOW databases;"
 sudo mysql -u root -ppasswd123 -e \
 "CREATE DATABASE wordpress; \
 "
-
+sleep 10
 sudo mysql -u root -ppasswd123 -e \
 "SET GLOBAL validate_password.policy=LOW; \
 CREATE USER wordpressuser@localhost IDENTIFIED BY 'passwd123'; \

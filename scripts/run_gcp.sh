@@ -48,13 +48,15 @@ echo "===== PROJECT_NAME: ${PROJECT_NAME}"
 echo "===== PROJECT_ID: ${PROJECT_ID}"
 echo "===== TZ_REGION: ${TZ_REGION}"
 echo "===== TZ_ZONE: ${TZ_ZONE}"
-sleep 5
+gcloud config set account ${TZ_ACCOUNT}
+
+sleep 3
 
 gcloud info --format flattened
 gcloud organizations list
 ORG_ID=$(gcloud organizations list --format 'value(ID)')
 echo "ORG_ID: ${ORG_ID}"
-sleep 10
+sleep 5
 
 gcloud projects create ${PROJECT_ID} --organization=${ORG_ID} # --folder=${FOLDER_ID}
 gcloud projects list --filter "parent.id=${ORG_ID} AND  parent.type=organization"
@@ -108,8 +110,8 @@ SERVICE_ACCOUNT=$(gcloud iam service-accounts list | grep 'terraform_service_acc
 echo "SERVICE_ACCOUNT: ${SERVICE_ACCOUNT}"
 #gcloud iam service-accounts delete ${SERVICE_ACCOUNT}
 
-PROJECT_ID=$(gcloud config list project --format='value(core.project)')
-PROJECT_NUMBER=$(gcloud projects describe ${PROJECT_ID} --format="value(projectNumber)")
+#PROJECT_ID=$(gcloud config list project --format='value(core.project)')
+#PROJECT_NUMBER=$(gcloud projects describe ${PROJECT_ID} --format="value(projectNumber)")
 gcloud projects list --uri
 
 gcloud iam service-accounts keys create /vagrant/terraform/google-key.json \
@@ -154,10 +156,11 @@ terraform init
 terraform plan
 
 alias tapply='terraform apply -auto-approve'
-tapply
+terraform apply -auto-approve
 
 gcloud compute instances list
 
+sleep 10
 cd /vagrant/terraform
 public_ip=$(terraform output | grep "public_ip" | awk '{print $3}' | sed 's/"//g')
 echo "public_ip: ${public_ip}"

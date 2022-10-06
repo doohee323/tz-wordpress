@@ -21,9 +21,9 @@ terraform -v
 #PROJECT_ID=${PROJECT_NAME}-3240
 
 bash /vagrant/scripts/run_gcp.sh \
+  doohee323@new-nation.church \
   us-west2 \
   us-west2-a \
-  doohee323@new-nation.church \
   newnationchurch \
-  3240
+  3241
 
