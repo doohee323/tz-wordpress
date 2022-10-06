@@ -30,6 +30,7 @@ if [ -f "/etc/mysql/mysql.conf.d/mysqld.cnf" ]; then
     sudo sed -i "s/127.0.0.1/0.0.0.0/g" /etc/mysql/mysql.conf.d/mysqld.cnf
 fi
 
+sleep 10
 #sudo mysql_secure_installation
 sudo bash /home/ubuntu/resources/mysql_secure_installation.sh
 mysql -u root -ppasswd123 -e "SHOW databases;"
@@ -44,7 +45,10 @@ mysql -u root -ppasswd123 -e "SHOW databases;"
 
 sudo mysql -u root -ppasswd123 -e \
 "CREATE DATABASE wordpress; \
-SET GLOBAL validate_password.policy=LOW; \
+"
+
+sudo mysql -u root -ppasswd123 -e \
+"SET GLOBAL validate_password.policy=LOW; \
 CREATE USER wordpressuser@localhost IDENTIFIED BY 'passwd123'; \
 GRANT ALL PRIVILEGES ON *.* TO wordpressuser@localhost; \
 CREATE USER wordpressuser@'%' IDENTIFIED BY 'passwd123'; \
@@ -57,7 +61,7 @@ sudo service mysql stop
 sudo service mysql start
 #sudo service mysql status
 tail /var/log/mysql/error.log
-mysql -u wordpress -ppasswd123 -e "SHOW databases;"
+mysql -u wordpressuser -ppasswd123 -e "SHOW databases;"
 
 ### [install php] ############################################################################################################
 sudo apt-get install software-properties-common -y

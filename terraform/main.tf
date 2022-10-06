@@ -75,7 +75,7 @@ resource "google_compute_instance" "dev" {
       private_key = file(var.privatekeypath)
     }
     inline = [
-      "sudo bash /home/ubuntu/wordpress.sh",
+      "sudo bash /home/ubuntu/resources/wordpress.sh",
     ]
   }
   depends_on = [ google_compute_firewall.web-server ]

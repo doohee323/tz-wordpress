@@ -12,7 +12,7 @@ cd /vagrant/resources/terraform
 
 TZ_ACCOUNT=doohee323@new-nation.church
 PROJECT_NAME=newnationchurch
-PROJECT_ID=${PROJECT_NAME}-3239
+PROJECT_ID=${PROJECT_NAME}-3240
 if [ "${1}" != "" ]; then
   PROJECT_ID=${PROJECT_NAME}-${1}
 fi
@@ -108,12 +108,13 @@ gcloud iam service-accounts keys create /vagrant/terraform/google-key.json \
 cat /vagrant/terraform/google-key.json
 
 cd ~/.ssh
+rm -Rf ${PROJECT_ID}*
 ssh-keygen -t rsa -C ${PROJECT_ID} -P "" -f ${PROJECT_ID} -q
 chmod -Rf 600 ${PROJECT_ID}*
 cp -Rf ${PROJECT_ID}* /home/vagrant/.ssh
-cp -Rf ${PROJECT_ID}* /vagrant/resources/terraform
+cp -Rf ${PROJECT_ID}* /vagrant/terraform
 chown -Rf vagrant:vagrant /home/vagrant/.ssh
-chown -Rf vagrant:vagrant /vagrant/resources/terraform
+chown -Rf vagrant:vagrant /vagrant/terraform
 
 gcloud projects get-iam-policy ${PROJECT_ID}
 
@@ -145,7 +146,9 @@ tapply
 
 gcloud compute instances list
 
+cd /vagrant/terraform
 public_ip=$(terraform output | grep "public_ip" | awk '{print $3}' | sed 's/"//g')
+echo "public_ip: ${public_ip}"
 
 echo "
 Host ${public_ip}
@@ -170,6 +173,7 @@ rm -Rf .terraform
 rm -Rf .terraform.lock.hcl
 rm -Rf terraform.tfstate
 rm -Rf terraform.tfstate.backup
+rm -Rf ${PROJECT_ID}*
 
 gcloud iam service-accounts delete ${SERVICE_ACCOUNT} -q
 gcloud projects delete --quiet ${PROJECT_ID} -q
