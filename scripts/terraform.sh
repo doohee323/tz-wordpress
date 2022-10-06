@@ -148,14 +148,12 @@ Host ${public_ip}
 
 echo ssh ubuntu@${public_ip}
 
-# terraform destroy -auto-approve
-
 exit 0
 
 
 #################################
 
-cd /vagrant/resources/terraform
+cd /vagrant/terraform
 terraform destroy -auto-approve
 
 rm -Rf .terraform

@@ -15,52 +15,81 @@ sudo sh -c "echo 'export SRC_DIR='$SRC_DIR >> $HOME_DIR/.bashrc"
 sudo sh -c "echo 'export PROJ_DIR='$PROJ_DIR >> $HOME_DIR/.bashrc"
 source $HOME_DIR/.bashrc
 
-sudo apt-get install software-properties-common -y
-sudo add-apt-repository ppa:ondrej/php -y
-sudo add-apt-repository ppa:ondrej/mysql-5.7 -y
-sudo apt-get update
-
 ### [install mysql] ############################################################################################################
-#echo "mysql-server-5.7 mysql-server/root_password password passwd123" | sudo debconf-set-selections
-#echo "mysql-server-5.7 mysql-server/root_password_again password passwd123" | sudo debconf-set-selections
-#sudo apt-get install mysql-server-5.7 -y
-sudo apt-get install mysql-server mysql-client libmysqlclient-dev -y
+sudo apt-get purge mysql-server-8.0 -y
+sudo rm -Rf /var/lib/mysql
+sudo rm -Rf /etc/mysql/mysql.conf.d/mysqld.cnf
+echo "mysql-server-8.0 mysql-server/root_password password passwd123" | sudo debconf-set-selections
+echo "mysql-server-8.0 mysql-server/root_password_again password passwd123" | sudo debconf-set-selections
+sudo apt-get install mysql-server-8.0 -y
+mysql -u root -ppasswd123 -e "SHOW databases;"
 
-if [ -f "/etc/mysql/my.cnf" ];then
-    sudo sed -i "s/bind-address/#bind-address/g" /etc/mysql/my.cnf
-else
+if [ -f "/etc/mysql/mysql.conf.d/mysqld.cnf" ]; then
     sudo sed -i "s/bind-address/#bind-address/g" /etc/mysql/mysql.conf.d/mysqld.cnf
+    sudo sed -i "s/mysqlx-#bind-address/mysqlx-bind-address/g" /etc/mysql/mysql.conf.d/mysqld.cnf
+    sudo sed -i "s/127.0.0.1/0.0.0.0/g" /etc/mysql/mysql.conf.d/mysqld.cnf
 fi
 
-sudo mysql -u root -ppasswd123 -e \
-"use mysql; \
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'passwd123'; \
-FLUSH PRIVILEGES; \
-"
+#sudo mysql_secure_installation
+sudo bash /home/ubuntu/resources/mysql_secure_installation.sh
+mysql -u root -ppasswd123 -e "SHOW databases;"
+
+#sudo mysql -u root -ppasswd123 -e \
+#"use mysql; \
+#SET GLOBAL validate_password.policy=LOW; \
+#CREATE USER 'root'@'localhost' IDENTIFIED BY 'passwd123'; \
+#GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost'; \
+#FLUSH PRIVILEGES; \
+#"
+
 sudo mysql -u root -ppasswd123 -e \
 "CREATE DATABASE wordpress; \
-CREATE USER wordpressuser@localhost; \
-SET PASSWORD FOR wordpressuser@localhost= PASSWORD('passwd123'); \
-GRANT ALL PRIVILEGES ON wordpress.* TO wordpressuser@localhost IDENTIFIED BY 'passwd123'; \
+SET GLOBAL validate_password.policy=LOW; \
+CREATE USER wordpressuser@localhost IDENTIFIED BY 'passwd123'; \
+GRANT ALL PRIVILEGES ON *.* TO wordpressuser@localhost; \
+CREATE USER wordpressuser@'%' IDENTIFIED BY 'passwd123'; \
+GRANT ALL PRIVILEGES ON *.* TO wordpressuser@'%'; \
+SET SQL_SAFE_UPDATES=0; \
 FLUSH PRIVILEGES; \
 "
 
-### [install php] ############################################################################################################
-sudo apt-get install php7.1 libapache2-mod-php7.1 php7.1-common php7.1-mbstring php7.1-xmlrpc php7.1-soap php7.1-gd -y
-sudo apt-get install php7.1-fpm php7.1-xml php7.1-intl php7.1-mysql php7.1-cli php7.1-mcrypt php7.1-zip php7.1-curl -y
-sudo apt-get install libapache2-mod-php7.1 -y
+sudo service mysql stop
+sudo service mysql start
+#sudo service mysql status
+tail /var/log/mysql/error.log
+mysql -u wordpress -ppasswd123 -e "SHOW databases;"
 
-sudo sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g" /etc/php/7.1/fpm/php.ini
-sudo sed -i "s/;error_log = php_errors.log/error_log = php_errors.log/g" /etc/php/7.1/fpm/php.ini
-sudo sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 200M/g" /etc/php/7.1/fpm/php.ini
-sudo sed -i "s/post_max_size = 8M/post_max_size = 200M/g" /etc/php/7.1/fpm/php.ini
-sudo sed -i "s/max_execution_time = 30/max_execution_time = 360/g" /etc/php/7.1/fpm/php.ini
-sudo sed -i "s/max_input_time = 300/max_input_time = 24000/g" /etc/php/7.1/fpm/php.ini
-sudo sed -i "s/memory_limit = 128MB/memory_limit = 2048M/g" /etc/php/7.1/fpm/php.ini
-sudo service php7.1-fpm stop 
+### [install php] ############################################################################################################
+sudo apt-get install software-properties-common -y
+sudo add-apt-repository ppa:ondrej/php -y
+sudo apt-get update
+#sudo apt-get purge php7.4 -y
+sudo apt-get install php7.4 -y
+#sudo apt-get install php7.4 libapache2-mod-php7.4 php7.4-common php7.4-mbstring php7.4-xmlrpc php7.4-soap php7.4-gd -y
+sudo apt-get install php7.4-fpm php7.4-xml php7.4-intl php7.4-mysql php7.4-cli php7.4-mcrypt php7.4-zip php7.4-curl -y
+#sudo apt-get install php-mysql -y
+#sudo apt-get install libapache2-mod-php7.4 -y
+
+sudo apt-get install libapache2-mod-php7.4 -y
+sudo apt-get install php-mysql -y
+sudo a2enmod rewrite
+sudo apt install php-xml -y
+sudo apt-get install php7.4-gd -y
+sudo apt-get install php7.4-mbstring -y
+sudo apt install php7.4-zip -y
+
+#sudo sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g" /etc/php/7.4/fpm/php.ini
+#sudo sed -i "s/;error_log = php_errors.log/error_log = php_errors.log/g" /etc/php/7.4/fpm/php.ini
+#sudo sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 200M/g" /etc/php/7.4/fpm/php.ini
+#sudo sed -i "s/post_max_size = 8M/post_max_size = 200M/g" /etc/php/7.4/fpm/php.ini
+#sudo sed -i "s/max_execution_time = 30/max_execution_time = 360/g" /etc/php/7.4/fpm/php.ini
+#sudo sed -i "s/max_input_time = 300/max_input_time = 24000/g" /etc/php/7.4/fpm/php.ini
+#sudo sed -i "s/memory_limit = 128MB/memory_limit = 2048M/g" /etc/php/7.4/fpm/php.ini
+sudo service php7.4-fpm stop
 
 ### [install apache2] ############################################################################################################
-apt-get install apache2 -y
+sudo apt-get purge apache2 -y
+sudo apt-get install apache2 -y
 sudo sh -c "echo '' >> /etc/apache2/apache2.conf"
 sudo sh -c "echo '<Directory /var/www/html/>' >> /etc/apache2/apache2.conf"
 sudo sh -c "echo '    AllowOverride All' >> /etc/apache2/apache2.conf"
@@ -70,19 +99,19 @@ sudo sh -c "echo '' >> /etc/apache2/apache2.conf"
 cat <<EOT > /etc/apache2/sites-available/wordpress.conf
 
 <VirtualHost *:80>
-     ServerAdmin admin@local.com
-     DocumentRoot /var/www/html/
-     #ServerName dev.new-nation.church
-     #ServerAlias dev.new-nation.church
+    ServerAdmin admin@local.com
+    DocumentRoot /var/www/html/
+    ServerName dev.new-nation.church
+    ServerAlias dev.new-nation.church
 
-     <Directory /var/www/html/>
-        Options +FollowSymlinks
-        AllowOverride All
-        Require all granted
-     </Directory>
+    <Directory /var/www/html/>
+      Options Indexes FollowSymLinks
+      AllowOverride All
+      Require all granted
+    </Directory>
 
-     ErrorLog /var/log/apache2/error.log
-     CustomLog /var/log/apache2/access.log combined
+    ErrorLog /var/log/apache2/error.log
+    CustomLog /var/log/apache2/access.log combined
 </VirtualHost>
 
 EOT
@@ -90,11 +119,20 @@ EOT
 rm -Rf /etc/apache2/sites-enabled/000-default.conf
 ln -s /etc/apache2/sites-available/wordpress.conf /etc/apache2/sites-enabled/wordpress.conf
 
+rm -rf /var/www/html/index.html
+
+sudo apt reinstall apache2 libapache2-mod-wsgi -y
+cd /etc/apache2/sites-enabled
 sudo a2ensite wordpress.conf
 sudo a2enmod rewrite
-sudo a2enmod php7.1
+sudo a2dismod mpm_event
+sudo systemctl restart apache2
+sudo a2enmod mpm_prefork
+sudo systemctl restart apache2
+sudo a2enmod php7.4
+sudo systemctl restart apache2
 
-service apache2 restart
+### [open firewalls] ############################################################################################################
 
 ### [install wordpress] ############################################################################################################
 sudo mkdir -p $PROJ_DIR
@@ -102,7 +140,7 @@ cd $PROJ_DIR
 rm -Rf latest.tar.gz
 sudo wget http://wordpress.org/latest.tar.gz
 sudo tar xzvf latest.tar.gz
-sudo apt-get install php7.1-gd -y
+sudo apt-get install php7.4-gd -y
 sudo apt-get install libssh2-php -y
 
 cd $PROJ_DIR/wordpress
@@ -161,12 +199,12 @@ if [ $1 == "aws" ];then
     ./configure
     make
     sudo make install
-    
+
     sudo sh -c "echo $AWS_KEY > /etc/passwd-s3fs"
     sudo chmod 600 /etc/passwd-s3fs
-    
-    sudo s3fs topzone /var/www/html/wp-content/uploads -o nonempty -o allow_other 
-    # sudo s3fs topzone /var/www/html/wp-content/uploads -o passwd_file=/etc/passwd-s3fs -d -d -f -o f2 -o curldbg -o nonempty 
+
+    sudo s3fs topzone /var/www/html/wp-content/uploads -o nonempty -o allow_other
+    # sudo s3fs topzone /var/www/html/wp-content/uploads -o passwd_file=/etc/passwd-s3fs -d -d -f -o f2 -o curldbg -o nonempty
     # sudo umount /var/www/html/wp-content/uploads
     # sudo fusermount -u /var/www/html/wp-content/uploads
     # cf. s3fs topzone /var/www/html/wp-content/uploads -o passwd_file=/etc/passwd-s3fs -d -d -f -o f2 -o curldbg
@@ -174,17 +212,17 @@ if [ $1 == "aws" ];then
     sudo echo "topzone /var/www/html/wp-content/uploads fuse.s3fs _netdev,allow_other,dbglevel=dbg,curldbg 0 0" >> /etc/fstab
 elif [ $1 == "gcp" ];then
 	echo "Not ready!!!"
-else 
+else
     chown -Rf www-data:www-data /var/www/html/wp-content/uploads
 fi
 
 ### [start services] ############################################################################################################
 
-sudo /etc/init.d/mysql restart
+sudo service mysql restart
 #mysql -h localhost -P 3306 -u root -p
 
 sudo service vsftpd restart
-sudo service php7.1-fpm restart
+sudo service php7.4-fpm restart
 sudo service apache2 restart
 
 #curl http://192.168.82.170
@@ -201,14 +239,14 @@ sudo mv wp-cli.phar /usr/local/bin/wp
 exit 0
 
 
-#vi /etc/php/7.1/fpm/php.ini
+#vi /etc/php/7.4/fpm/php.ini
 display_errors = On
 display_startup_errors = On
 log_errors = On
 error_reporting = E_ALL
 display_errors = On
 
-sudo service php7.1-fpm restart
+sudo service php7.4-fpm restart
 #tail -f /var/log/syslog
 
 ### [https ] ############################################################################################################

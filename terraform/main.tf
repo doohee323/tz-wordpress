@@ -1,10 +1,10 @@
 terraform {
   required_version = ">= 0.11.5"
 
-  backend "gcs" {
-    bucket = "newnationchurch-3239-state"
-    prefix      = "tz-tfsate"
-  }
+//  backend "gcs" {
+//    bucket = "newnationchurch-3239-state"
+//    prefix      = "tz-tfsate"
+//  }
 }
 
 resource "google_storage_bucket" "terraform_state" {
@@ -75,7 +75,7 @@ resource "google_compute_instance" "dev" {
       private_key = file(var.privatekeypath)
     }
     inline = [
-      "bash /home/ubuntu/wordpress.sh",
+      "sudo bash /home/ubuntu/wordpress.sh",
     ]
   }
   depends_on = [ google_compute_firewall.web-server ]
