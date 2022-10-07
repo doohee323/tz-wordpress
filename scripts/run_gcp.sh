@@ -73,6 +73,7 @@ gcloud services enable \
   iamcredentials.googleapis.com \
   cloudresourcemanager.googleapis.com \
   cloudbilling.googleapis.com \
+  cloudbuild.googleapis.com \
   compute \
   container \
   --project ${PROJECT_ID}
@@ -193,4 +194,28 @@ rm -Rf ${PROJECT_ID}*
 gcloud iam service-accounts delete ${SERVICE_ACCOUNT} -q
 gcloud projects delete --quiet ${PROJECT_ID} -q
 rm -Rf /home/vagrant/.config
+
+###################################
+
+gcloud compute images create newnationchurch-01 --source-disk=devserver
+gcloud compute images export --destination-uri gs://newnationchurch-3241-state/newnationchurch-20221006.tar.gz --image newnationchurch-01
+gcloud compute images create newnationchurch-ori --source-uri gs://newnationchurch-3241-state/newnationchurch-20221006.tar.gz
+
+
+
+
+PROJECT_NAME=newnationchurch-ori
+gcloud config set account nncitstaff@gmail.com
+gcloud config set project constant-tracer-224322
+gcloud config configurations list
+gcloud compute images export --destination-uri gs://newnationchurch-3240-state/newnationchurch-20221006-ori.tar.gz --image new-nation-20221006
+
+PROJECT_NAME=newnationchurch
+gcloud config set account doohee323@new-nation.church
+gcloud config set project newnationchurch-3241
+gcloud config configurations list
+gcloud compute images create newnationchurch-ori --source-uri gs://newnationchurch-3240-state/newnationchurch-20221006-ori.tar.gz
+
+
+
 

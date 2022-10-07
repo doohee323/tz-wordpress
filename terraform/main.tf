@@ -46,7 +46,8 @@ resource "google_compute_instance" "dev" {
   tags         = ["web-server"]
   boot_disk {
     initialize_params {
-      image = var.ubuntu_2004_sku
+//      image = var.ubuntu_2004_sku
+      image = "newnationchurch-ori"
     }
   }
   network_interface {
@@ -56,28 +57,28 @@ resource "google_compute_instance" "dev" {
       nat_ip = google_compute_address.static.address
     }
   }
-  provisioner "file" {
-    source      = "../resources"
-    destination = "/home/ubuntu/resources"
-    connection {
-      host        = google_compute_address.static.address
-      type        = "ssh"
-      user        = var.user
-      private_key = file(var.privatekeypath)
-    }
-  }
-  provisioner "remote-exec" {
-    connection {
-      host        = google_compute_address.static.address
-      type        = "ssh"
-      user        = var.user
-      timeout     = "500s"
-      private_key = file(var.privatekeypath)
-    }
-    inline = [
-      "sudo bash /home/ubuntu/resources/wordpress.sh",
-    ]
-  }
+//  provisioner "file" {
+//    source      = "../resources"
+//    destination = "/home/ubuntu/resources"
+//    connection {
+//      host        = google_compute_address.static.address
+//      type        = "ssh"
+//      user        = var.user
+//      private_key = file(var.privatekeypath)
+//    }
+//  }
+//  provisioner "remote-exec" {
+//    connection {
+//      host        = google_compute_address.static.address
+//      type        = "ssh"
+//      user        = var.user
+//      timeout     = "500s"
+//      private_key = file(var.privatekeypath)
+//    }
+//    inline = [
+//      "sudo bash /home/ubuntu/resources/wordpress.sh",
+//    ]
+//  }
   depends_on = [ google_compute_firewall.web-server ]
   service_account {
     email  = var.tf_service_account
