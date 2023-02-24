@@ -1,0 +1,48 @@
+version: '3.4'
+
+services:
+  tz-wordpress:
+    image: 'doohee323/tz-wordpress:latest'
+    build:
+      context: ../../
+      dockerfile: tz-local/docker/tz-wordpress/Dockerfile
+    volumes:
+      - ../../:/vagrant/
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+      - app-volume:/vagrant/
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    environment:
+      - TGDDEV=TRUE
+      - TGDLOCAL=TRUE
+    links:
+      - mysql
+  mysql:
+    image: 'mysql:latest'
+    build: mysql
+    environment:
+      - MYSQL_USER=root
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=wordpress
+      - MYSQL_PORT=3306
+    ports:
+      - '3306:3306'
+    command: 'mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp'
+  nginx:
+    image: nginx
+    restart: always
+    build:
+      context: ../../
+      dockerfile: tz-local/docker/nginx/Dockerfile
+    volumes:
+      - ../../:/home/ubuntu/ubuntu/
+      - app-volume:/vagrant/
+    ports:
+      - 8000:80
+      - 8080:8080
+    links:
+      - tz-wordpress
+volumes:
+     app-volume:
