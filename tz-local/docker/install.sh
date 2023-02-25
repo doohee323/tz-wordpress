@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
-git clone https://github.com/doohee323/tz-wordpress.git
+git clone -b docker https://github.com/doohee323/tz-wordpress.git
 cd tz-wordpress
-git checkout -b docker origin/docker
 
 sudo wget http://wordpress.org/latest.tar.gz
 sudo tar xzvf latest.tar.gz

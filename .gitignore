@@ -1,8 +1,5 @@
-/.vagrant/
 /wordpress/
 /latest.tar.gz
 .bashrc
 .DS_Store
-docker-compose.yml_bak
-docker-compose.yml_bake
-Dockerfile_bak
+.idea
