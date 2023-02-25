@@ -5,14 +5,27 @@ install a wordpress server with docker, MySQL, nginx, php 8.x.
 ## Run on Vagrant
 -. prep.
 ```
-    - install docker
+    - install docker-desktop
+  		https://www.docker.com/products/docker-desktop/
+	- install git
+  		https://git-scm.com/downloads
+	- install vscode
+  		https://code.visualstudio.com/download
+	- install tabby (optional)
+  		https://tabby.sh/
+	- install wsl on windows
+		https://learn.microsoft.com/en-us/windows/wsl/install
 
 ```
 
 ## Run on Docker
 ```
-
+	run tz-local/docker/install.sh
 ```
+
+## Open wordpress locally
+	http://localhost:8080
+
 
 ## Other INFOs
 -. install plugins
@@ -34,10 +47,3 @@ install a wordpress server with docker, MySQL, nginx, php 8.x.
 	wp plugin install edit-flow --activate
 	
 ```
-
--. Test
-	- password: passwd123
-	https://192.168.82.170
-
-
-

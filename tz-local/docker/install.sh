@@ -1,21 +1,23 @@
 #!/usr/bin/env bash
 
-#set -x
+git clone https://github.com/doohee323/tz-wordpress.git
+cd tz-wordpress
+git checkout -b docker origin/docker
 
-#cd /Volumes/workspace/tz/tz-wordpress
 sudo wget http://wordpress.org/latest.tar.gz
 sudo tar xzvf latest.tar.gz
 
-sudo cp tz-local/docker/tz-wordpress/wp-config.php tz-wordpress/wp-config.php
+sudo cp tz-local/docker/tz-wordpress/wp-config.php wordpress/wp-config.php
 
-#cd /Volumes/workspace/tz/tz-wordpress/tz-local/tz-ubuntu
-
+cd tz-local/docker/
 #docker container stop $(docker container ls -a -q) && docker system prune -a -f --volumes
 #docker-compose -f docker-compose.yml build --no-cache
 #docker-compose -f docker-compose.yml down
 docker-compose -f docker-compose.yml build
 docker-compose -f docker-compose.yml up -d
 #docker logs docker-nginx-1
+
+curl http://localhost:8080
 
 exit 0
 
