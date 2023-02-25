@@ -9,6 +9,7 @@ sudo tar xzvf latest.tar.gz
 sudo cp tz-local/docker/tz-wordpress/wp-config.php tz-wordpress/wp-config.php
 
 #cd /Volumes/workspace/tz/tz-wordpress/tz-local/tz-ubuntu
+
 #docker container stop $(docker container ls -a -q) && docker system prune -a -f --volumes
 #docker-compose -f docker-compose.yml build --no-cache
 #docker-compose -f docker-compose.yml down
@@ -17,6 +18,9 @@ docker-compose -f docker-compose.yml up -d
 #docker logs docker-nginx-1
 
 exit 0
+
+docker exec -it `docker ps | grep tz-wordpress | awk '{print $1}'` bash
+docker exec -it `docker ps | grep docker-nginx | awk '{print $1}'` bash
 
 DOCKER_ID=doohee323
 DOCKER_PASSWD=xxxx
