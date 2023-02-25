@@ -7,9 +7,10 @@ services:
       context: ../../
       dockerfile: tz-local/docker/tz-wordpress/Dockerfile
     volumes:
+      - ../../:/vagrant/
       - /var/run/docker.sock:/var/run/docker.sock
       - /usr/bin/docker:/usr/bin/docker
-#      - ../../:/vagrant/
+      - app-volume:/vagrant/
     dns:
       - 1.1.1.1
       - 8.8.8.8
@@ -35,8 +36,9 @@ services:
     build:
       context: ../../
       dockerfile: tz-local/docker/nginx/Dockerfile
-#    volumes:
-#      - ../../:/vagrant/
+    volumes:
+      - ../../:/home/ubuntu/ubuntu/
+      - app-volume:/vagrant/
     ports:
       - 8000:80
       - 8080:8080
