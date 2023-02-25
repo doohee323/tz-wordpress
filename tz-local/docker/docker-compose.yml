@@ -37,7 +37,7 @@ services:
       context: ../../
       dockerfile: tz-local/docker/nginx/Dockerfile
     volumes:
-      - ../../:/home/ubuntu/ubuntu/
+      - ../../:/vagrant/ubuntu/
       - app-volume:/vagrant/
     ports:
       - 8000:80

@@ -16,10 +16,10 @@ RUN docker-php-ext-install pdo_mysql
 LABEL Name=tz-wordpress
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-RUN mkdir -p /home/ubuntu
-RUN mkdir -p /home/ubuntu/logs
-ADD ./wordpress /home/ubuntu/wordpress/
-WORKDIR /home/ubuntu/wordpress/
+RUN mkdir -p /vagrant
+RUN mkdir -p /vagrant/logs
+ADD ./wordpress /vagrant/wordpress/
+WORKDIR /vagrant/wordpress/
 
 # setup php configure
 RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
@@ -29,4 +29,4 @@ RUN sed -i 's/short_open_tag\s*=.*/short_open_tag=On/g' /usr/local/etc/php/php.i
 RUN sed -i 's/memory_limit\s*=.*/memory_limit=1024M/g' /usr/local/etc/php/php.ini
 RUN sed -i 's/display_errors = Off/display_errors = On/g' /usr/local/etc/php/php.ini
 
-#ADD ./wordpress/wp-config.php /home/ubuntu/wordpress/
+#ADD ./wordpress/wp-config.php /vagrant/wordpress/
