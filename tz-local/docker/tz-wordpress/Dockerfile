@@ -1,4 +1,3 @@
-#FROM doohee323/tz-ubuntu:latest
 FROM php:8.1-fpm
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
@@ -9,27 +8,10 @@ RUN apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng-dev libonig-d
         gcc make autoconf libc-dev pkg-config \
         git awscli zip unzip \
         curl libcurl4
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg
-RUN docker-php-ext-install -j$(nproc) gd
 
-# enable docker-php extensions
-RUN docker-php-ext-install mbstring
-RUN docker-php-ext-install gmp
-RUN docker-php-ext-install iconv
 RUN docker-php-ext-install mysqli
 RUN docker-php-ext-install pdo
 RUN docker-php-ext-install pdo_mysql
-RUN docker-php-ext-install exif
-
-# install zip
-RUN docker-php-ext-install zip
-# install mcrypt
-
-RUN pecl install mcrypt \
-    && docker-php-ext-enable mcrypt \
-
-# install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
 
 LABEL Name=tz-wordpress
 
