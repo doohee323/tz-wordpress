@@ -20,7 +20,9 @@ install a wordpress server with docker, MySQL, nginx, php 8.x.
 
 ## Run on Docker
 ```
-	run tz-local/docker/install.sh
+    git clone -b docker https://github.com/doohee323/tz-wordpress.git
+    cd tz-wordpress
+	bash tz-local/docker/install.sh
 ```
 
 ## Open wordpress locally
