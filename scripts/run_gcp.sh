@@ -219,3 +219,20 @@ gcloud compute images create newnationchurch-ori --source-uri gs://newnationchur
 
 
 
+terraform state list
+terraform state rm cloudresourcemanager.googleapis.com
+terraform state rm iamcredentials.googleapis.com
+terraform state rm serviceusage.googleapis.com
+terraform state rm aws_iam_group_membership.testgroup-group-membership.testuser
+terraform state rm google_project_service.services
+terraform state rm google_compute_firewall.web-server
+terraform state rm google_compute_instance.dev
+
+terraform import google_compute_network.tz_vpc tz-vpc
+terraform import google_compute_subnetwork.tz_sub tz-sub
+terraform import google_storage_bucket.terraform_state newnationchurch-3241-state
+terraform import google_project_service.services newnationchurch-3241/iam.googleapis.com
+terraform import google_compute_firewall.web-server allow-http-rule
+terraform import google_compute_address.static vm-public-address
+terraform import google_compute_instance.dev devserver
+
