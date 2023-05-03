@@ -18,7 +18,7 @@ terraform -v
 #TZ_REGION=us-west2
 #TZ_ZONE=us-west2-a
 #PROJECT_NAME=newnationchurch
-#PROJECT_ID=${PROJECT_NAME}-3240
+#PROJECT_ID=${PROJECT_NAME}-3241
 
 bash /vagrant/scripts/run_gcp.sh \
   doohee323@new-nation.church \

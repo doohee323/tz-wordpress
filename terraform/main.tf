@@ -1,10 +1,10 @@
 terraform {
   required_version = ">= 0.11.5"
 
-//  backend "gcs" {
-//    bucket = "newnationchurch-3239-state"
-//    prefix      = "tz-tfsate"
-//  }
+  backend "gcs" {
+    bucket = "newnationchurch-3241-state"
+    prefix      = "tz-tfsate"
+  }
 }
 
 resource "google_storage_bucket" "terraform_state" {
@@ -39,7 +39,7 @@ resource "google_compute_address" "static" {
   depends_on = [ google_compute_firewall.web-server ]
 }
 resource "google_compute_instance" "dev" {
-  name         = "devserver"
+  name         = "devserver2"
   machine_type = var.linux_instance_type
   zone         = var.gcp_zone
   hostname     = var.hostname
@@ -47,7 +47,8 @@ resource "google_compute_instance" "dev" {
   boot_disk {
     initialize_params {
 //      image = var.ubuntu_2004_sku
-      image = "newnationchurch-ori"
+//      image = "newnationchurch-ori"
+      image = "newnationchurch-20230502"
     }
   }
   network_interface {

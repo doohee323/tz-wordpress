@@ -57,7 +57,7 @@ bash /vagrant/scripts/run_gcp.sh \
   us-west2-a \
   doohee323@new-nation.church \
   newnationchurch \
-  3240
+  3241
 
     4. vagrant up
 

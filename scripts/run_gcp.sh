@@ -26,7 +26,7 @@ PROJECT_NAME=newnationchurch
 if [ "${4}" != "" ]; then
   PROJECT_NAME=${4}
 fi
-PROJECT_ID=${PROJECT_NAME}-3240
+PROJECT_ID=${PROJECT_NAME}-3241
 if [ "${5}" != "" ]; then
   PROJECT_ID=${PROJECT_NAME}-${5}
 fi
@@ -208,13 +208,13 @@ PROJECT_NAME=newnationchurch-ori
 gcloud config set account nncitstaff@gmail.com
 gcloud config set project constant-tracer-224322
 gcloud config configurations list
-gcloud compute images export --destination-uri gs://newnationchurch-3240-state/newnationchurch-20221006-ori.tar.gz --image new-nation-20221006
+gcloud compute images export --destination-uri gs://newnationchurch-3241-state/newnationchurch-20221006-ori.tar.gz --image new-nation-20221006
 
 PROJECT_NAME=newnationchurch
 gcloud config set account doohee323@new-nation.church
 gcloud config set project newnationchurch-3241
 gcloud config configurations list
-gcloud compute images create newnationchurch-ori --source-uri gs://newnationchurch-3240-state/newnationchurch-20221006-ori.tar.gz
+gcloud compute images create newnationchurch-ori --source-uri gs://newnationchurch-3241-state/newnationchurch-20221006-ori.tar.gz
 
 
 
