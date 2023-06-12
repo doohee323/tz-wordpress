@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo apt-get -y install expect
+sudo apt update && sudo apt-get -y install expect
 MYSQL_ROOT_PASSWORD=passwd123
 
 SECURE_MYSQL=$(expect -c "
@@ -26,3 +26,4 @@ expect eof
 ")
 echo "$SECURE_MYSQL"
 sudo apt-get -y purge expect
+

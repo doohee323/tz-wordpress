@@ -102,3 +102,65 @@ resource "google_project_service" "services" {
 output "public_ip" {
   value = google_compute_instance.dev.network_interface.0.access_config.0.nat_ip
 }
+
+
+
+resource "google_compute_address" "nnst" {
+  name = "nnst-public-address"
+  project = var.gcp_project
+  region = var.gcp_region
+  depends_on = [ google_compute_firewall.web-server ]
+}
+resource "google_compute_instance" "nnst" {
+  name         = "nnst"
+  machine_type = var.linux_instance_type
+  zone         = var.gcp_zone
+  hostname     = var.hostname
+  tags         = ["nnst-server"]
+  boot_disk {
+    initialize_params {
+//      image = var.ubuntu_2004_sku
+      image = "wordpress-init-20230611"
+    }
+  }
+  network_interface {
+    network = google_compute_network.tz_vpc.name
+    subnetwork    = google_compute_subnetwork.tz_sub.name
+    access_config {
+      nat_ip = google_compute_address.nnst.address
+    }
+  }
+  provisioner "file" {
+    source      = "../resources"
+    destination = "/home/ubuntu/resources"
+    connection {
+      host        = google_compute_address.nnst.address
+      type        = "ssh"
+      user        = var.user
+      private_key = file(var.privatekeypath)
+    }
+  }
+//  provisioner "remote-exec" {
+//    connection {
+//      host        = google_compute_address.static.address
+//      type        = "ssh"
+//      user        = var.user
+//      timeout     = "500s"
+//      private_key = file(var.privatekeypath)
+//    }
+//    inline = [
+//      "sudo bash /home/ubuntu/resources/wordpress.sh",
+//    ]
+//  }
+  depends_on = [ google_compute_firewall.web-server ]
+  service_account {
+    email  = var.tf_service_account
+    scopes = ["compute-ro"]
+  }
+  metadata = {
+    ssh-keys = "${var.user}:${file(var.publickeypath)}"
+  }
+}
+output "nnst_public_ip" {
+  value = google_compute_instance.nnst.network_interface.0.access_config.0.nat_ip
+}
