@@ -9,7 +9,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /usr/bin/docker:/usr/bin/docker
-#      - ../../:/vagrant/
+      - ../../:/vagrant/
     dns:
       - 1.1.1.1
       - 8.8.8.8
@@ -29,14 +29,16 @@ services:
     ports:
       - '3306:3306'
     command: 'mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp'
+    volumes:
+      - ../../:/vagrant/
   nginx:
     image: nginx
     restart: always
     build:
       context: ../../
       dockerfile: tz-local/docker/nginx/Dockerfile
-#    volumes:
-#      - ../../:/vagrant/
+    volumes:
+      - ../../:/vagrant/
     ports:
       - 8000:80
       - 8080:8080
