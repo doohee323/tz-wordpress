@@ -14,10 +14,19 @@ services:
       - 1.1.1.1
       - 8.8.8.8
     environment:
-      - TGDDEV=TRUE
-      - TGDLOCAL=TRUE
+      - MEMCACHED_HOST=memcached
+      - MEMCACHED_PORT=11211
     links:
       - mysql
+      - memcached
+    restart: always
+
+  memcached:
+    image: bitnami/memcached:latest
+    ports:
+      - 11211:11211
+    restart: always
+
   mysql:
     image: 'mysql:latest'
     build: mysql
@@ -31,18 +40,19 @@ services:
     command: 'mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp'
     volumes:
       - ../../:/vagrant/
+    restart: on-failure
   nginx:
     image: nginx
-    restart: always
     build:
       context: ../../
       dockerfile: tz-local/docker/nginx/Dockerfile
     volumes:
       - ../../:/vagrant/
     ports:
-      - 8000:80
+      - 8000:8000
       - 8080:8080
     links:
       - tz-wordpress
+    restart: always
 volumes:
      app-volume:
