@@ -11,9 +11,9 @@ sudo cp tz-local/docker/tz-wordpress/wp-config.php wordpress/wp-config.php
 cd tz-local/docker/
 #docker container stop $(docker container ls -a -q) && docker system prune -a -f --volumes
 #docker-compose -f docker-compose.yml build --no-cache
-#docker-compose -f docker-compose.yml down
-docker-compose -f docker-compose.yml build
-docker-compose -f docker-compose.yml up -d
+#docker-compose -f docker-compose2.yml down
+docker-compose -f docker-compose2.yml build
+docker-compose -f docker-compose2.yml up -d
 #docker logs docker-nginx-1
 
 curl http://localhost:8080
