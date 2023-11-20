@@ -1,0 +1,58 @@
+version: '3.4'
+
+services:
+  tz-wordpress:
+    image: 'doohee323/tz-wordpress:latest'
+    build:
+      context: ../../
+      dockerfile: tz-local/docker/tz-wordpress/Dockerfile
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+      - ../../:/vagrant/
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    environment:
+      - MEMCACHED_HOST=memcached
+      - MEMCACHED_PORT=11211
+    links:
+#      - mysql
+      - memcached
+    restart: always
+
+  memcached:
+    image: bitnami/memcached:latest
+    ports:
+      - 11211:11211
+    restart: always
+
+#  mysql:
+#    image: 'mysql:latest'
+#    build: mysql
+#    environment:
+#      - MYSQL_USER=root
+#      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+#      - MYSQL_DATABASE=wordpress
+#      - MYSQL_PORT=3306
+#    ports:
+#      - '3306:3306'
+#    command: 'mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp'
+#    volumes:
+#      - ../../:/vagrant/
+#    restart: on-failure
+  nginx:
+    image: nginx
+    build:
+      context: ../../
+      dockerfile: tz-local/docker/nginx/Dockerfile
+    volumes:
+      - ../../:/vagrant/
+    ports:
+      - 8000:8000
+      - 8080:8080
+    links:
+      - tz-wordpress
+    restart: always
+volumes:
+     app-volume:
