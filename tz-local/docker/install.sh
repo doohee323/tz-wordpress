@@ -75,4 +75,33 @@ docker-compose -f docker-compose-https1.yml run --rm certbot certonly --webroot 
 #docker-compose -f docker-compose-https2.yml build
 docker-compose -f docker-compose-https2.yml up
 
+exit 0
 
+FLUSH PRIVILEGES;
+
+mysql -u root -p
+
+CREATE USER 'wordpressuser'@'%' IDENTIFIED BY 'xxxxx';
+GRANT ALL PRIVILEGES ON *.* to 'wordpressuser'@'%';
+GRANT ALL PRIVILEGES ON wordpressuser.* to 'wordpressuser'@'%';
+GRANT ALL PRIVILEGES ON `%`.* TO wordpressuser@'%';
+ALTER USER 'wordpressuser'@'%' IDENTIFIED WITH mysql_native_password BY 'xxxxx';
+SHOW GRANTS for wordpressuser;
+
+mysql -u wordpressuser -p
+CREATE DATABASE wordpress;
+
+#/usr/bin/mysqldump --user='wordpressuser' --password='xxxxx' -h localhost wordpress > /home/ubuntu/mysql_backup/wordpress-`date +"%Y-%m-%d"`.sql
+
+MYSQL_PASSWORD='xxxxx'
+mysql -h 34.94.230.37 -P 3306 -u wordpressuser -p${MYSQL_PASSWORD}
+mysql -h 34.94.230.37 -P13306 -u wordpressuser -p${MYSQL_PASSWORD} wordpress < wordpress-2023-11-19.sql
+
+UPDATE wp_options SET option_value = replace(option_value, 'http://new-nation.church', 'https://new-nation.church') WHERE option_name = 'home' OR option_name = 'siteurl';
+UPDATE wp_posts SET guid = replace(guid, 'http://new-nation.church','https://new-nation.church');
+UPDATE wp_posts SET post_content = replace(post_content, 'http://new-nation.church', 'https://new-nation.church');
+UPDATE wp_postmeta SET meta_value = replace(meta_value,'http://new-nation.church','https://new-nation.church');
+
+apt install default-mysql-client -y
+MYSQL_PASSWORD='xxxxx'
+mysql -h 34.94.230.37 -P 3306 -u wordpressuser -p${MYSQL_PASSWORD}
