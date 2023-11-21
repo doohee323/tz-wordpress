@@ -49,7 +49,8 @@ services:
     volumes:
       - ../../:/vagrant/
     ports:
-      - 80:8080
+      - 80:80
+      - 443:443
     links:
       - tz-wordpress
     restart: always
