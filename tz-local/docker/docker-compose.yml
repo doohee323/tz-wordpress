@@ -18,14 +18,14 @@ services:
       - MEMCACHED_PORT=11211
     links:
       - mysql
-      - memcached
+#      - memcached
     restart: always
 
-  memcached:
-    image: bitnami/memcached:latest
-    ports:
-      - 11211:11211
-    restart: always
+#  memcached:
+#    image: bitnami/memcached:latest
+#    ports:
+#      - 11211:11211
+#    restart: always
 
   mysql:
     image: 'mysql:latest'

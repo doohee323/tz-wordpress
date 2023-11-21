@@ -41,11 +41,15 @@ UPDATE wp_posts SET guid = replace(guid, 'https://new-nation.church','http://loc
 UPDATE wp_posts SET post_content = replace(post_content, 'https://new-nation.church', 'http://localhost:8080');
 UPDATE wp_postmeta SET meta_value = replace(meta_value,'https://new-nation.church','http://localhost:8080');
 
+
+select * from wp_options
+WHERE option_name = 'home' OR option_name = 'siteurl';
+
 #newnation /
 
-#wget https://getcomposer.org/download/1.8.0/composer.phar -O /usr/local/bin/composer && chmod 755 /usr/local/bin/composer
-#composer self-update
-#composer install
+wget https://getcomposer.org/download/1.8.0/composer.phar -O /usr/local/bin/composer && chmod 755 /usr/local/bin/composer
+composer self-update
+composer install
 #
 #curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
 
