@@ -42,15 +42,18 @@ services:
 #      - ../../:/vagrant/
 #    restart: on-failure
   nginx:
-    image: nginx
+    image: nginx:latest
     build:
       context: ../../
       dockerfile: tz-local/docker/nginx/Dockerfile
     volumes:
+      - ../../tz-local/docker/nginx/conf/:/etc/nginx/conf.d/:ro
+      - ../../tz-local/docker/certbot/www/:/var/www/certbot/:ro
+      - ../../tz-local/docker/certbot/conf/:/etc/letsencrypt/:ro
       - ../../:/vagrant/
     ports:
       - 80:80
-      - 8080:8080
+      - 443:443
     links:
       - tz-wordpress
     restart: always
