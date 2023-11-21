@@ -36,10 +36,11 @@ docker push ${TAG}
 
 exit 0
 
-UPDATE wp_options SET option_value = replace(option_value, 'https://new-nation.church', 'http://localhost:8080') WHERE option_name = 'home' OR option_name = 'siteurl';
-UPDATE wp_posts SET guid = replace(guid, 'https://new-nation.church','http://localhost:8080');
-UPDATE wp_posts SET post_content = replace(post_content, 'https://new-nation.church', 'http://localhost:8080');
-UPDATE wp_postmeta SET meta_value = replace(meta_value,'https://new-nation.church','http://localhost:8080');
+SELECT * FROM wp_options WHERE option_name = 'home' OR option_name = 'siteurl';
+UPDATE wp_options SET option_value = replace(option_value, 'https://new-nation.church', 'http://34.94.230.37') WHERE option_name = 'home' OR option_name = 'siteurl';
+UPDATE wp_posts SET guid = replace(guid, 'https://new-nation.church','http://34.94.230.37');
+UPDATE wp_posts SET post_content = replace(post_content, 'https://new-nation.church', 'http://34.94.230.37');
+UPDATE wp_postmeta SET meta_value = replace(meta_value,'https://new-nation.church','http://34.94.230.37');
 
 
 select * from wp_options
@@ -53,6 +54,11 @@ composer install
 #
 #curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
 
+exit 0
+
+#https://phoenixnap.com/kb/letsencrypt-docker
+docker-compose run --rm certbot certonly --webroot \
+  --webroot-path /var/www/certbot/ --dry-run -d new-nation.church
 
 
 

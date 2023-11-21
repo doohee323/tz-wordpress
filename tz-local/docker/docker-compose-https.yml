@@ -1,0 +1,26 @@
+version: '3.4'
+
+services:
+  nginx:
+    image: nginx:latest
+    build:
+      context: ../../
+      dockerfile: tz-local/docker/nginx/Dockerfile
+    volumes:
+      - ./nginx/conf/:/etc/nginx/conf.d/:ro
+      - ./certbot/www/:/var/www/certbot/:ro
+      - ../../:/vagrant/
+    ports:
+      - 80:80
+      - 443:443
+    links:
+      - tz-wordpress
+    restart: always
+
+  certbot:
+      image: certbot/certbot:latest
+      volumes:
+        - ./certbot/www/:/var/www/certbot/:rw
+        - ./certbot/conf/:/etc/letsencrypt/:rw
+volumes:
+     app-volume:
