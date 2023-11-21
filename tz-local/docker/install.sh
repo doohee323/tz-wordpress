@@ -57,7 +57,15 @@ composer install
 exit 0
 
 #https://phoenixnap.com/kb/letsencrypt-docker
-docker-compose -f docker-compose-https.yml run --rm certbot certonly --webroot \
+
+docker-compose -f docker-compose-https.yml build
+docker-compose -f docker-compose-https.yml up
+
+cd wordpress
+mkdir -p certbot/conf
+mkdir -p certbot/www
+
+docker-compose -f docker-compose-https.yml run --rm certbot -v certonly --webroot \
   --webroot-path /var/www/certbot/ --dry-run -d new-nation.church
 
 
