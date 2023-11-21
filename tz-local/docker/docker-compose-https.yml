@@ -18,7 +18,7 @@ services:
   certbot:
       image: certbot/certbot:latest
       volumes:
-        - ../../wordpress/certbot/www/:/vagrant/wordpress/certbot/:rw
-        - ../../wordpress/certbot/conf/:/etc/letsencrypt/:rw
+        - ./certbot/www/:/var/www/certbot/:rw
+        - ./certbot/conf/:/etc/letsencrypt/:rw
 volumes:
      app-volume:
