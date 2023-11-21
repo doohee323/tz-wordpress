@@ -7,8 +7,8 @@ services:
       context: ../../
       dockerfile: tz-local/docker/nginx/Dockerfile
     volumes:
-      - ./nginx/conf/:/etc/nginx/conf.d/:ro
-      - ./certbot/www/:/var/www/certbot/:ro
+      - ../../tz-local/docker/nginx/conf/:/etc/nginx/conf.d/:ro
+      - ../../tz-local/docker/certbot/www/:/var/www/certbot/:ro
       - ../../:/vagrant/
     ports:
       - 80:80
@@ -16,9 +16,11 @@ services:
     restart: always
 
   certbot:
-      image: certbot/certbot:latest
-      volumes:
-        - ./certbot/www/:/var/www/certbot/:rw
-        - ./certbot/conf/:/etc/letsencrypt/:rw
+    image: certbot/certbot:latest
+    build:
+      context: ../../
+    volumes:
+      - ../../tz-local/docker/certbot/www/:/var/www/certbot/:rw
+      - ../../tz-local/docker/certbot/conf/:/etc/letsencrypt/:rw
 volumes:
      app-volume:
