@@ -17,8 +17,6 @@ services:
 
   certbot:
     image: certbot/certbot:latest
-    build:
-      context: ../../
     volumes:
       - ../../tz-local/docker/certbot/www/:/var/www/certbot/:rw
       - ../../tz-local/docker/certbot/conf/:/etc/letsencrypt/:rw
