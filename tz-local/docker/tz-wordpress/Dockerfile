@@ -19,7 +19,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 #RUN mkdir -p /vagrant
 #RUN mkdir -p /vagrant/logs
 #ADD ./wordpress /vagrant/wordpress/
-#WORKDIR /vagrant/wordpress/
+WORKDIR /vagrant/wordpress/
 
 # setup php configure
 RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini

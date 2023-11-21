@@ -8,4 +8,4 @@ ADD ./tz-local/docker/nginx/nginx.conf /etc/nginx/nginx.conf
 ADD ./tz-local/docker/nginx/default.conf /etc/nginx/conf.d/default.conf
 
 #ADD ./wordpress /vagrant/wordpress/
-#WORKDIR /vagrant/wordpress/
+WORKDIR /vagrant/wordpress/
