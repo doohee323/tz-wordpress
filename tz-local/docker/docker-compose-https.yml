@@ -7,8 +7,8 @@ services:
       context: ../../
       dockerfile: tz-local/docker/nginx/Dockerfile
     volumes:
-      - ../../tz-local/docker/nginx/conf/:/etc/nginx/conf.d/:rw
-      - ../../tz-local/docker/certbot/www/:/var/www/certbot/:rw
+      - ../../tz-local/docker/nginx/conf/:/etc/nginx/conf.d/:ro
+      - ../../tz-local/docker/certbot/www/:/var/www/certbot/:ro
       - ../../:/vagrant/
     ports:
       - 80:80
