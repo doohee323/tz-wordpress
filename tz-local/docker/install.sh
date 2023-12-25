@@ -75,6 +75,10 @@ docker-compose -f docker-compose-https1.yml run --rm certbot certonly --webroot 
 #docker-compose -f docker-compose-https2.yml build
 docker-compose -f docker-compose-https2.yml up
 
+# renew certi
+cd /home/ubuntu/tz-wordpress/tz-local/docker
+docker-compose -f docker-compose-https1.yml run --rm certbot renew
+
 exit 0
 
 FLUSH PRIVILEGES;
