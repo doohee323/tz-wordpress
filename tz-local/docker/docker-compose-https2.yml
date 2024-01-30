@@ -61,6 +61,8 @@ services:
   ubuntu:
     image: ubuntu:22.04
     command: tail -f /dev/null
+    ports:
+      - 3306:13306
     volumes:
       - ../../:/vagrant/
     links:
