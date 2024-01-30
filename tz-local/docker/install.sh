@@ -10,7 +10,7 @@ sudo cp tz-local/docker/tz-wordpress/wp-config.php wordpress/wp-config.php
 
 cd tz-local/docker/
 #docker container stop $(docker container ls -a -q) && docker system prune -a -f --volumes
-#docker-compose -f docker-compose.yml build --no-cache
+#docker-compose -f docker-compose2.yml build --no-cache
 #docker-compose -f docker-compose2.yml down
 docker-compose -f docker-compose.yml build
 docker-compose -f docker-compose.yml up -d
@@ -85,19 +85,22 @@ FLUSH PRIVILEGES;
 
 mysql -u root -p
 
-CREATE USER 'wordpressuser'@'%' IDENTIFIED BY 'xxxxx';
+CREATE USER 'wordpressuser'@'%' IDENTIFIED BY 'xxxxxx';
 GRANT ALL PRIVILEGES ON *.* to 'wordpressuser'@'%';
 GRANT ALL PRIVILEGES ON wordpressuser.* to 'wordpressuser'@'%';
 GRANT ALL PRIVILEGES ON `%`.* TO wordpressuser@'%';
-ALTER USER 'wordpressuser'@'%' IDENTIFIED WITH mysql_native_password BY 'xxxxx';
+ALTER USER 'wordpressuser'@'%' IDENTIFIED WITH mysql_native_password BY 'xxxxxx';
 SHOW GRANTS for wordpressuser;
 
 mysql -u wordpressuser -p
 CREATE DATABASE wordpress;
 
-#/usr/bin/mysqldump --user='wordpressuser' --password='xxxxx' -h localhost wordpress > /home/ubuntu/mysql_backup/wordpress-`date +"%Y-%m-%d"`.sql
+#/usr/bin/mysqldump --user='wordpressuser' --password='xxxxxx' -h localhost wordpress > /home/ubuntu/mysql_backup/wordpress-`date +"%Y-%m-%d"`.sql
+#/usr/bin/mysql -h localhost --user=wordpressuser --password='xxxxxx' wordpress < wordpress-`date +"%Y-%m-%d"`.sql
 
-MYSQL_PASSWORD='xxxxx'
+/usr/bin/mysql -h new-nation.church --user=wordpressuser --password='xxxxxx'
+
+MYSQL_PASSWORD='xxxxxx'
 mysql -h 34.94.230.37 -P 3306 -u wordpressuser -p${MYSQL_PASSWORD}
 mysql -h 34.94.230.37 -P13306 -u wordpressuser -p${MYSQL_PASSWORD} wordpress < wordpress-2023-11-19.sql
 
@@ -107,5 +110,5 @@ UPDATE wp_posts SET post_content = replace(post_content, 'http://new-nation.chur
 UPDATE wp_postmeta SET meta_value = replace(meta_value,'http://new-nation.church','https://new-nation.church');
 
 apt install default-mysql-client -y
-MYSQL_PASSWORD='xxxxx'
+MYSQL_PASSWORD='xxxxxx'
 mysql -h 34.94.230.37 -P 3306 -u wordpressuser -p${MYSQL_PASSWORD}
