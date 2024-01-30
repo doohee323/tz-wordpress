@@ -58,15 +58,5 @@ services:
       - tz-wordpress
     restart: always
 
-  ubuntu:
-    image: ubuntu:22.04
-    command: tail -f /dev/null
-    ports:
-      - 13306:3306
-    volumes:
-      - ../../:/vagrant/
-    links:
-      - tz-wordpress
-
 volumes:
      app-volume:
