@@ -57,5 +57,13 @@ services:
     links:
       - tz-wordpress
     restart: always
+
+  ubuntu:
+    image: ubuntu:20.04
+    volumes:
+      - ../../:/vagrant/
+    links:
+      - tz-wordpress
+
 volumes:
      app-volume:
