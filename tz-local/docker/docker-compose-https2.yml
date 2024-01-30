@@ -59,7 +59,7 @@ services:
     restart: always
 
   ubuntu:
-    image: ubuntu:20.04
+    image: ubuntu:22.04
     command: tail -f /dev/null
     volumes:
       - ../../:/vagrant/
