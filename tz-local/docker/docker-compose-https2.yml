@@ -60,6 +60,7 @@ services:
 
   ubuntu:
     image: ubuntu:20.04
+    command: tail -f /dev/null
     volumes:
       - ../../:/vagrant/
     links:
